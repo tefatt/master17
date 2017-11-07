@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+import pymysql
+
+pymysql.install_as_MySQLdb()  # hack
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -77,8 +80,17 @@ WSGI_APPLICATION = 'eCore.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'eContainer',
+        'USER': 'root',
+        'PASSWORD': 'tempus993',
+        'HOST': '127.0.0.1',  # Or an IP Address that your DB is hosted on
+        'PORT': '3306',
+        'OPTIONS': {'charset': 'utf8mb4'},
+    },
+    'time_series': {
+        'ENGINE': 'django_mongodb_engine',
+        'NAME': 'my_database'
     }
 }
 
@@ -120,3 +132,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
