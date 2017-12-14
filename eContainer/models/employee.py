@@ -11,4 +11,8 @@ class EmployeeModel(BaseModel):
     job_title = models.CharField(max_length=225, blank=True, null=True)
     vehicle = models.ForeignKey(VehicleModel)
 
+    def __str__(self):
+        return "{} {}".format(self.first_name, self.last_name)
+
+
 

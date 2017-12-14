@@ -8,3 +8,7 @@ class VehicleModel(BaseModel):
     capacity = models.FloatField()
     type = models.CharField(max_length=225)
     municipality = models.CharField(max_length=225)
+
+    def __str__(self):
+        return "{} - {}".format(self.id, self.type)
+

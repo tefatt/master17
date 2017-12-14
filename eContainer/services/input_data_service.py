@@ -1,16 +1,16 @@
 from django.conf import settings
 import googlemaps
-
+import rrdtool
 
 class InputDataService:
 
     def __init__(self):
         pass
 
-    @staticmethod
-    def calculate_group_demand(measurements):
-        """Formula for calculating the value for each group location of containers"""
-        return value
+    # @staticmethod
+    # def calculate_group_demand(measurements):
+    #     """Formula for calculating the value for each group location of containers"""
+    #     return value
 
     @staticmethod
     def calculate_distance(location1, location2):

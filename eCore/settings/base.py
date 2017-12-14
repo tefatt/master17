@@ -18,7 +18,6 @@ pymysql.install_as_MySQLdb()  # hack
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
@@ -30,7 +29,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -41,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'eContainer',
+    'rest_framework',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
@@ -74,6 +74,27 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'eCore.wsgi.application'
 
+# GOOGLE
+
+# GOOGLE_API = {
+#     'CLIENT_ID': '493593414963-snd1im5a0k54mtv89ol193igp0bej339.apps.googleusercontent.com',
+#     'CLIENT_SECRET': 'w9H9FgJb8WQXfuxMKHfIt-Pu',
+#     'SCOPE': ' '.join([
+#         'profile',
+#         'email',
+#         'https://www.googleapis.com/auth/gmail.modify',
+#         'https://www.googleapis.com/auth/gmail.readonly',
+#         'https://www.googleapis.com/auth/gmail.compose',
+#         'https://www.googleapis.com/auth/plus.me',
+#         'https://www.googleapis.com/auth/contacts.readonly',
+#         'https://www.googleapis.com/auth/drive.readonly',
+#         'https://www.googleapis.com/auth/pubsub',
+#         'https://www.googleapis.com/auth/calendar'
+#     ]),
+#     'PUSH_ENDPOINT': 'https://test.getunbox.com/api/services/notifications/',
+#     'PROJECT': 'unbox2-174713',
+#     'TOPIC': 'projects/unbox2-174713/topics/user-notifications'
+# }
 
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
@@ -83,16 +104,26 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'eContainer',
         'USER': 'root',
-        'PASSWORD': 'tempus993',
-        'HOST': '127.0.0.1',  # Or an IP Address that your DB is hosted on
+        'PASSWORD': 'root',
+        'HOST': 'localhost',  # Or an IP Address that your DB is hosted on
         'PORT': '3306',
-        'OPTIONS': {'charset': 'utf8mb4'},
-    },
-    'time_series': {
-        'ENGINE': 'django_mongodb_engine',
-        'NAME': 'my_database'
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'eContainer',
+#         'USER': 'root',
+#         'PASSWORD': 'tempus993',
+#         'HOST': '127.0.0.1',  # Or an IP Address that your DB is hosted on
+#         'PORT': '3306',
+#         'OPTIONS': {'charset': 'utf8mb4'},
+#     },
+#     'time_series': {
+#         'ENGINE': 'django_mongodb_engine',
+#         'NAME': 'my_database'
+#     }
+# }
 
 
 # Password validation
@@ -113,7 +144,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
@@ -127,10 +157,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
-
-

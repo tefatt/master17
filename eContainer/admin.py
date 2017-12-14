@@ -1,3 +1,11 @@
 from django.contrib import admin
 
-# Register your models here.
+from eContainer.models import *
+
+admin.site.register(DeviceModel)
+admin.site.register(DeviceGroupModel)
+admin.site.register(VehicleModel)
+admin.site.register(EmployeeModel)
+admin.site.register(LocationModel)
+
+admin.site.site_header = 'eContainer Administration'
