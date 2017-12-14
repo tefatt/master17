@@ -12,6 +12,8 @@ DEPOT_LOCATION = {}
 # os.environ["GOOGLE_CLOUD_PROJECT"] = "econtainer-1498514901196"
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = BASE_DIR + '/eContainer-f03bac2d8a5e.json'
 GOOGLE_API = {'PROJECT': 'econtainer-1498514901196',
+              'DEVICE_DATA_TOPIC': 'projects/econtainer-1498514901196/topics/device_data',
+              'DEVICE_DATA_SUBSCRIPTION': 'projects/econtainer-1498514901196/subscriptions/'
               }
 
 
