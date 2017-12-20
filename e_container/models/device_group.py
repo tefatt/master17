@@ -1,10 +1,10 @@
 from django.db import models
-from eContainer.models import BaseModel
+from e_container.models import BaseModel
 
-from eContainer.models import LocationModel
-from eContainer.models import EmployeeModel
+from e_container.models import LocationModel
+from e_container.models import EmployeeModel
 
-from eContainer.services.pubsub_service import PubSubService
+from e_container.services.pubsub_service import PubSubService
 
 
 class DeviceGroupModel(BaseModel):

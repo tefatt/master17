@@ -1,5 +1,5 @@
 from django.db import models
-from eContainer.models import BaseModel
+from e_container.models import BaseModel
 
 
 class VehicleModel(BaseModel):

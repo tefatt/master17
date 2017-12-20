@@ -1,7 +1,7 @@
 from django.db import models
-from eContainer.models import BaseModel
+from e_container.models import BaseModel
 
-from eContainer.models import DeviceGroupModel
+from e_container.models import DeviceGroupModel
 
 
 class DeviceModel(BaseModel):
@@ -27,6 +27,6 @@ class DeviceModel(BaseModel):
     type = models.IntegerField(choices=DEVICE_TYPES, default=STANDARD)
 
     def __str__(self):
-        return "{} - {}".format(self.id, self.type)
+        return "{} - Type: {}".format(self.id, self.type)
 
 

@@ -1,4 +1,4 @@
-from eContainer.services.input_data_service import InputDataService
+from e_container.services.input_data_service import InputDataService
 
 
 class CreateDistanceCallback(object):

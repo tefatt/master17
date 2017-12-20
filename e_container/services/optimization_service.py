@@ -1,7 +1,7 @@
 from ortools.constraint_solver import pywrapcp
 from ortools.constraint_solver import routing_enums_pb2
 
-from eContainer.services.callbacks import distance_callback, demand_callback
+from e_container.services.callbacks import distance_callback, demand_callback
 
 
 class OptimizationService:

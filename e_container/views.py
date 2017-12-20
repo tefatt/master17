@@ -2,17 +2,19 @@ from django.shortcuts import render
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 
-from eContainer.services.input_data_service import InputDataService
-from eContainer.services.optimization_service import OptimizationService
-from eContainer.utils.common_utils import CommonUtils
-from eContainer.models.device import DeviceModel
-from eContainer.models.vehicle import VehicleModel
+from e_container.services.input_data_service import InputDataService
+from e_container.services.optimization_service import OptimizationService
+from e_container.services.pubsub_service import PubSubService
+from e_container.utils.common_utils import CommonUtils
+from e_container.models.device import DeviceModel
+from e_container.models.vehicle import VehicleModel
+
 
 @csrf_exempt
 def update(request):
+    pubsub = PubSubService('Group_1_at_Hifzi_Bjelevca_64')
+    pubsub.pull_from_subscription(InputDataService.update_device_status)
     values = list()
-    with open('/Users/teufiktutundzic/Desktop/master17/somefile.txt', 'a') as the_file:
-        the_file.write('CAOOOO\n')
     if request.body:
         request_body = CommonUtils.decode_request(request.body)
         ordered_devices = dict()

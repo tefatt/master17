@@ -16,6 +16,25 @@ GOOGLE_API = {'PROJECT': 'econtainer-1498514901196',
               'DEVICE_DATA_SUBSCRIPTION': 'projects/econtainer-1498514901196/subscriptions/'
               }
 
+# celery
+os.environ['PYTHON_PATH'] = '/Users/teufiktutundzic/env_eContainer/lib/python3.6/site-packages'
+
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    # Executes every 30min
+    'pull_from_pubsub': {
+        'task': 'e_container.tasks.update_device_group_status',
+        'schedule': crontab(minute='*/30'),
+        'relative': True
+    },
+}
 
 # # GOOGLE
 # GOOGLE_API = {

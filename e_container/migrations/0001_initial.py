@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
                 ('status', models.BooleanField(choices=[(0, 'not installed'), (1, 'active'), (2, 'broken'), (3, 'repaired')], default=0)),
                 ('max_capacity', models.PositiveIntegerField(help_text='Max capacity of the container it is installed on')),
                 ('type', models.IntegerField(choices=[(0, 'standard')], default=0)),
-                ('group_id', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='eContainer.DeviceGroupModel')),
+                ('group_id', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='e_container.DeviceGroupModel')),
             ],
             options={
                 'abstract': False,
@@ -89,16 +89,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='employeemodel',
             name='vehicle',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='eContainer.VehicleModel'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='e_container.VehicleModel'),
         ),
         migrations.AddField(
             model_name='devicegroupmodel',
             name='employee_check_up',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='eContainer.EmployeeModel'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='e_container.EmployeeModel'),
         ),
         migrations.AddField(
             model_name='devicegroupmodel',
             name='location',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='eContainer.LocationModel'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='e_container.LocationModel'),
         ),
     ]

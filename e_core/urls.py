@@ -19,5 +19,5 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^services/', include('eContainer.urls'))
+    url(r'^services/', include('e_container.urls'))
 ]

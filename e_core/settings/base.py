@@ -11,9 +11,10 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
-import pymysql
 
-pymysql.install_as_MySQLdb()  # hack
+# import pymysql
+#
+# pymysql.install_as_MySQLdb()  # hack
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -38,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'eContainer',
+    'e_container',
     'rest_framework',
     'rest_framework.authtoken'
 ]
@@ -53,7 +54,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'eCore.urls'
+ROOT_URLCONF = 'e_core.urls'
 
 TEMPLATES = [
     {
@@ -72,10 +73,9 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'eCore.wsgi.application'
+WSGI_APPLICATION = 'e_core.wsgi.application'
 
 # GOOGLE
-
 # GOOGLE_API = {
 #     'CLIENT_ID': '493593414963-snd1im5a0k54mtv89ol193igp0bej339.apps.googleusercontent.com',
 #     'CLIENT_SECRET': 'w9H9FgJb8WQXfuxMKHfIt-Pu',
@@ -96,6 +96,7 @@ WSGI_APPLICATION = 'eCore.wsgi.application'
 #     'TOPIC': 'projects/unbox2-174713/topics/user-notifications'
 # }
 
+
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
@@ -112,7 +113,7 @@ DATABASES = {
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'eContainer',
+#         'NAME': 'e_container',
 #         'USER': 'root',
 #         'PASSWORD': 'tempus993',
 #         'HOST': '127.0.0.1',  # Or an IP Address that your DB is hosted on

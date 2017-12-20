@@ -1,7 +1,7 @@
 from django.db import models
-from eContainer.models import BaseModel
+from e_container.models import BaseModel
 
-from eContainer.models import VehicleModel
+from e_container.models import VehicleModel
 
 
 class EmployeeModel(BaseModel):
