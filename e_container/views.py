@@ -5,22 +5,33 @@ from django.views.decorators.csrf import csrf_exempt
 from e_container.services.input_data_service import InputDataService
 from e_container.services.optimization_service import OptimizationService
 from e_container.services.pubsub_service import PubSubService
+from e_container.services.rrdtool_service import RrdtoolService
 from e_container.utils.common_utils import CommonUtils
 from e_container.models.device import DeviceModel
 from e_container.models.vehicle import VehicleModel
+from e_container.models.device_group import DeviceGroupModel
+import rrdtool
+from datetime import datetime
 
 
 @csrf_exempt
 def update(request):
-    pubsub = PubSubService('Group_1_at_Hifzi_Bjelevca_64')
-    pubsub.pull_from_subscription(InputDataService.update_device_status)
+    # pubsub = PubSubService('Group_1_at_Hifzi_Bjelevca_64')
+    # pubsub.pull_from_subscription(InputDataService.update_device_status)
+
     values = list()
     if request.body:
         request_body = CommonUtils.decode_request(request.body)
+
+        with open('/Users/teufiktutundzic/Desktop/master17/somefileX.txt', 'a') as the_file:
+            the_file.write('ENTERED\n')
+            the_file.write(str(request_body) + '\n')
         ordered_devices = dict()
+        dg = DeviceGroupModel.objects.get(id=request_body.get("device_group"))
+        RrdtoolService.create_rrd(str(dg), 'UltraSonicDistance', 0, 100, 'AVERAGE', 1, 48)
         for data in request_body.get('devices'):
+            RrdtoolService.update_rrd(str(dg), data.get("measurements").get("distance"))
             device = DeviceModel.objects.get(id=data.get("device_id"))
-            measurements = SensorDataModel.objects.create(defaults=data.get("measurements"))
             if device.group_id not in ordered_devices.keys():
                 ordered_devices[device.group_id] = list()
             ordered_devices[device.group_id].append((measurements, device))

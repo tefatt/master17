@@ -9,9 +9,9 @@ class CreateDistanceCallback(object):
         size = len(locations)
         self.matrix = {}
 
-        for from_node in xrange(size):
+        for from_node in range(size):
             self.matrix[from_node] = {}
-            for to_node in xrange(size):
+            for to_node in range(size):
                 if from_node == depot or to_node == depot:
                     self.matrix[from_node][to_node] = 0
                 else:

@@ -7,6 +7,9 @@ DEBUG = True
 GOOGLE_KEY = 'AIzaSyDTBWlYTjHXsnncux0qHVTroPWt5EWT6YM'
 # enter depot location
 DEPOT_LOCATION = {}
+# defining measurement variable properties with their min and max
+MEASUREMENT_VARIABLES = {'ultra_sonic_distance': [0, 100], 'temperature': [-10, 60], 'humidity': [0, 20],
+                         'battery_level': [0, 100]}
 
 # GOOGLE
 # os.environ["GOOGLE_CLOUD_PROJECT"] = "econtainer-1498514901196"
@@ -17,8 +20,6 @@ GOOGLE_API = {'PROJECT': 'econtainer-1498514901196',
               }
 
 # celery
-os.environ['PYTHON_PATH'] = '/Users/teufiktutundzic/env_eContainer/lib/python3.6/site-packages'
-
 CELERY_BROKER_URL = 'redis://localhost:6379'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']

@@ -1,9 +1,11 @@
 from django.conf import settings
 import googlemaps
-import rrdtool
+
+from e_container.services.rrdtool_service import RrdtoolService
 
 from e_container.utils.common_utils import CommonUtils
 from e_container.models.device import DeviceModel
+from e_container.models.device_group import DeviceGroupModel
 
 
 class InputDataService:
@@ -12,16 +14,18 @@ class InputDataService:
 
     @staticmethod
     def update_device_status(message):
-        with open('/Users/teufiktutundzic/Desktop/master17/somefileX.txt', 'a') as the_file:
-            the_file.write('ALOHA\n')
-            the_file.write(str(message) + '\n')
         values = list()
         if message.body:
             request_body = CommonUtils.decode_request(message.body)
             ordered_devices = dict()
+            dg = DeviceGroupModel.objects.get(id=request_body.get("device_group"))
+            # RrdtoolService.create_rrd(str(dg), 'UltraSonicDistance', 0, 100, 'AVERAGE', 1, 48)
+            rrd = RrdtoolService(str(dg))
             for data in request_body.get('devices'):
+                rrd.update_group(data.get("measurements"))
+                # RrdtoolService.update_rrd(str(dg), data.get("measurements").get("distance"))
+                value = rrd.get_last_value()
                 device = DeviceModel.objects.get(id=data.get("device_id"))
-                measurements = SensorDataModel.objects.create(defaults=data.get("measurements"))
                 if device.group_id not in ordered_devices.keys():
                     ordered_devices[device.group_id] = list()
                 ordered_devices[device.group_id].append((measurements, device))
@@ -46,4 +50,3 @@ class InputDataService:
             distance = property.get("elements")[0].get("distance").get("value")
             return distance
         return None
-
