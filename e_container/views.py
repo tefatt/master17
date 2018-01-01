@@ -2,14 +2,16 @@ from django.shortcuts import render
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 
-from e_container.services.input_data_service import InputDataService
+from e_container.services.data_service import DataService
 from e_container.services.optimization_service import OptimizationService
 from e_container.services.pubsub_service import PubSubService
+from e_container import tasks
 from e_container.services.rrdtool_service import RrdtoolService
 from e_container.utils.common_utils import CommonUtils
 from e_container.models.device import DeviceModel
 from e_container.models.vehicle import VehicleModel
 from e_container.models.device_group import DeviceGroupModel
+from e_container.models.location import LocationModel
 import rrdtool
 from datetime import datetime
 
@@ -19,9 +21,17 @@ def update(request):
     # pubsub = PubSubService('Group_1_at_Hifzi_Bjelevca_64')
     # pubsub.pull_from_subscription(InputDataService.update_device_status)
 
+    tasks.update_device_group_status()
     values = list()
     if request.body:
         request_body = CommonUtils.decode_request(request.body)
+        dg = DeviceGroupModel.objects.get(id=request_body.get("device_group"))
+        dg.recent_demand = DataService.calculate_group_demand(request_body.get("devices"))
+
+        l = LocationModel.objects.all()
+        v = VehicleModel.objects.all()
+        dem = [0, 19, 21, 6, 19]
+        OptimizationService(l, v, dem, 0)
 
         with open('/Users/teufiktutundzic/Desktop/master17/somefileX.txt', 'a') as the_file:
             the_file.write('ENTERED\n')
@@ -36,7 +46,7 @@ def update(request):
                 ordered_devices[device.group_id] = list()
             ordered_devices[device.group_id].append((measurements, device))
         for group_id, device_data in ordered_devices.items():
-            value = InputDataService.calculate_group_demand(device_data[0])
+            value = DataService.calculate_group_demand(device_data[0])
             device_properties = (value, device_data[1].location, device_data[1].active)
             values.append({group_id: device_properties})
     # TODO this goes to a template

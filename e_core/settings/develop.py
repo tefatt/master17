@@ -8,14 +8,15 @@ GOOGLE_KEY = 'AIzaSyDTBWlYTjHXsnncux0qHVTroPWt5EWT6YM'
 # enter depot location
 DEPOT_LOCATION = {}
 # defining measurement variable properties with their min and max
-MEASUREMENT_VARIABLES = {'ultra_sonic_distance': [0, 100], 'temperature': [-10, 60], 'humidity': [0, 20],
-                         'battery_level': [0, 100]}
+RRD_DIRECTORY = 'RRD_files'
+MEASUREMENT_VARIABLES = {'distance': [0, 100], 'temperature': [-10, 60], 'humidity': [0, 20],
+                         'battery_level': [0, 100], 'group_demand': [0, 100]}
 
 # GOOGLE
 # os.environ["GOOGLE_CLOUD_PROJECT"] = "econtainer-1498514901196"
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = BASE_DIR + '/eContainer-f03bac2d8a5e.json'
 GOOGLE_API = {'PROJECT': 'econtainer-1498514901196',
-              'DEVICE_DATA_TOPIC': 'projects/econtainer-1498514901196/topics/device_data',
+              'DEVICE_DATA_TOPIC': 'projects/econtainer-1498514901196/topics/e_project',
               'DEVICE_DATA_SUBSCRIPTION': 'projects/econtainer-1498514901196/subscriptions/'
               }
 

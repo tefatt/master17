@@ -8,10 +8,9 @@ class OptimizationService:
     def __init__(self, locations, vehicles, demands, depot):
         self.locations = locations
         self.vehicles = vehicles
-        self.demands = demands
         self.depot = depot
         routing = pywrapcp.RoutingModel(len(locations), len(vehicles), depot)
-        search_parameters = pywrapcp.RoutingModel.DefaultSearchParameters()
+        search_parameters = pywrapcp.RoutingModel_DefaultSearchParameters()
         search_parameters.first_solution_strategy = (
             routing_enums_pb2.FirstSolutionStrategy.PATH_CHEAPEST_ARC)
 

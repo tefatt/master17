@@ -103,7 +103,7 @@ WSGI_APPLICATION = 'e_core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'eContainer',
+        'NAME': 'e_container',
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST': 'localhost',  # Or an IP Address that your DB is hosted on

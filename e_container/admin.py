@@ -7,5 +7,6 @@ admin.site.register(DeviceGroupModel)
 admin.site.register(VehicleModel)
 admin.site.register(EmployeeModel)
 admin.site.register(LocationModel)
+admin.site.register(MunicipalityModel)
 
 admin.site.site_header = 'e_container Administration'

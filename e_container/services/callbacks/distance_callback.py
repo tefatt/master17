@@ -1,4 +1,4 @@
-from e_container.services.input_data_service import InputDataService
+from e_container.services.data_service import DataService
 
 
 class CreateDistanceCallback(object):
@@ -6,19 +6,15 @@ class CreateDistanceCallback(object):
 
     def __init__(self, locations, depot):
         """Initialize distance array."""
-        size = len(locations)
         self.matrix = {}
 
-        for from_node in range(size):
-            self.matrix[from_node] = {}
-            for to_node in range(size):
-                if from_node == depot or to_node == depot:
-                    self.matrix[from_node][to_node] = 0
+        for i, from_node in enumerate(locations):
+            self.matrix[i] = {}
+            for j, to_node in enumerate(locations):
+                if from_node == depot or to_node == depot or i == j:
+                    self.matrix[i][j] = 0
                 else:
-                    first_loc = locations[from_node]
-                    second_loc = locations[to_node]
-                    self.matrix[from_node][to_node] = InputDataService.calculate_distance(
-                        first_loc, second_loc)
+                    self.matrix[i][j] = DataService.calculate_distance(from_node, to_node)
 
-    def distance(self, from_node, to_node):
-        return self.matrix[from_node][to_node]
+    def distance(self, i, j):
+        return self.matrix[i][j]
