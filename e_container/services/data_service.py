@@ -3,10 +3,7 @@ import googlemaps
 import math
 
 from e_container.services.rrdtool_service import RrdtoolService
-
 from e_container.utils.common_utils import CommonUtils
-from e_container.models.device import DeviceModel
-from e_container.models.device_group import DeviceGroupModel
 
 
 class DataService:
@@ -15,20 +12,22 @@ class DataService:
 
     @staticmethod
     def update_device_status(message, device_group):
+        rrd = RrdtoolService(str(device_group), device_group.id, )
         try:
             message_body = CommonUtils.decode_request(message.data)
             if message_body.get("device_group") == device_group.id:
                 demand = DataService.calculate_group_demand(message_body.get("devices"))
+                rrd.update_group({'group_demand': demand})
+
+                # update individual measurements
                 for data in message_body.get('devices'):
                     rrd_name = "Device_{} of {}".format(data.get('device_id'), str(device_group))
                     rrd = RrdtoolService(rrd_name, device_group.id)
                     rrd.update_group(data.get("measurements"))
-                rrd = RrdtoolService(str(device_group), device_group.id)
-                rrd.update_group({'group_demand': demand})
                 return demand
         except Exception as e:
             X = True
-        return None
+        return rrd.get_last_value('group_demand')
 
     @staticmethod
     def calculate_group_demand(device_measurements):
@@ -56,7 +55,7 @@ class DataService:
     @staticmethod
     def calculate_distance(loc1, loc2):
         gmaps = googlemaps.Client(key=settings.GOOGLE_KEY)
-        response = gmaps.distance_matrix((loc1.latitude, loc1.longitude), (loc2.latitude, loc2.longitude))
+        response = gmaps.distance_matrix((loc1[0], loc1[1]), (loc2[0], loc2[1]))
         for property in response.get("rows"):
             # gets distance between two provided locations in meters
             distance = property.get("elements")[0].get("distance").get("value")

@@ -5,3 +5,5 @@ from .vehicle import VehicleModel
 from .employee import EmployeeModel
 from .device_group import DeviceGroupModel
 from .device import DeviceModel
+from .depot import DepotModel
+from .municipalty_depot import MunicipalityDepotModel

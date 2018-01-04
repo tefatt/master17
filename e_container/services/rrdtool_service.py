@@ -10,11 +10,11 @@ class RrdtoolService:
             os.makedirs(file_path)
         self.rrd_path = file_path
         self.rrd_name = "{}.rrd".format(rrd_name)
-        if not self.get_last_value():
-            first_parameters = ['AVERAGE', 1, 2 * 24]
-            second_parameters = ['MAX', 1, 2 * 24]
-            third_parameters = ['AVERAGE', 1, 2 * 24 * 30]
-            for variable, interval in settings.MEASUREMENT_VARIABLES.items():
+        for variable, interval in settings.MEASUREMENT_VARIABLES.items():
+            if self.get_last_value(variable) == 'Non existent':
+                first_parameters = ['AVERAGE', 1, 2 * 24]
+                second_parameters = ['MAX', 1, 2 * 24]
+                third_parameters = ['AVERAGE', 1, 2 * 24 * 30]
                 for p in [first_parameters, second_parameters, third_parameters]:
                     name = "{}/{} {}".format(file_path, variable.upper(), self.rrd_name)
                     RrdtoolService.create_rrd(name, variable, interval[0], interval[1], p[0], p[1], p[2])
@@ -33,11 +33,18 @@ class RrdtoolService:
         value = "N:{}".format(value)
         rrdtool.update(rrd_name, value)
 
-    def get_last_value(self):
+    def get_last_value(self, variable, date=False):
         try:
-            return rrdtool.lastupdate(self.rrd_name)
+            name = "{}/{} {}".format(self.rrd_path, variable.upper(), self.rrd_name)
+            last_update = rrdtool.lastupdate(name)
+            last_value = last_update.get('ds').get(variable)
+            last_value = last_value if last_value else 0
+            if date:
+                return last_value, last_update.get('date')
+            else:
+                return last_value
         except rrdtool.OperationalError:
-            return None
+            return 'Non existent'
 
     def update_group(self, values):
         for variable, value in values.items():

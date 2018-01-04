@@ -33,4 +33,4 @@ class DeviceModel(BaseModel):
         RrdtoolService(str(self.group), self.group.id)
 
     def __str__(self):
-        return "{} - Capacity: {}".format(self.group, self.max_capacity)
+        return "Device {}: {} - Capacity: {}".format(self.id, self.group, self.max_capacity)

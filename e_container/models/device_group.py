@@ -12,4 +12,4 @@ class DeviceGroupModel(BaseModel):
     employee_check_up = models.ForeignKey(EmployeeModel)
 
     def __str__(self):
-        return "Group_{} at {}".format(str(self.id), self.location.street)
+        return "Group_{} at {}-{}".format(self.id, self.location.street, self.location.municipality.name)

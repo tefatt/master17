@@ -32,7 +32,7 @@ from celery.schedules import crontab
 CELERY_BEAT_SCHEDULE = {
     # Executes every 30min
     'pull_from_pubsub': {
-        'task': 'e_container.tasks.update_device_group_status',
+        'task': 'e_container.tasks.fetch_all_device_group_statuses',
         'schedule': crontab(minute='*/30'),
         'relative': True
     },
