@@ -57,14 +57,12 @@ def invocation():
     for m in municipalities:
         if not m.next_invocation or (ago <= m.next_invocation <= ahead):
             fetch_all_device_group_statuses(m)
-    #         execute_municipalities.append(fetch_all_device_group_statuses.s(m))
-    # group(execute_municipalities).get()
+            #         execute_municipalities.append(fetch_all_device_group_statuses.s(m))
+            # group(execute_municipalities).get()
+
 
 @task()
-def reset_routes():
+def reset_saved_routes():
     for vehicle in VehicleModel.objects.all().filter(active=True):
         vehicle.last_route = None
         vehicle.save()
-
-
-

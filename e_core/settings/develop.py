@@ -46,7 +46,7 @@ CELERY_BEAT_SCHEDULE = {
         'relative': True
     },
     'restart_routes': {
-        'task': 'e_container.tasks.reset_routes',
+        'task': 'e_container.tasks.reset_saved_routes',
         'schedule': crontab(minute=0, hour=RESET_HOURS),
         'relative': True
     }
