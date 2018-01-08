@@ -9,6 +9,7 @@ GOOGLE_KEY = 'AIzaSyDTBWlYTjHXsnncux0qHVTroPWt5EWT6YM'
 DEPOT_LOCATION = {}
 # defining measurement variable properties with their min and max
 RRD_DIRECTORY = 'RRD_files'
+ROUTES_DIRECTORY = 'Routes'
 MEASUREMENT_VARIABLES = {'distance': [0, 100], 'temperature': [-10, 60], 'humidity': [0, 20],
                          'battery_level': [0, 100], 'group_demand': [0, 100]}
 
@@ -29,13 +30,26 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
 from celery.schedules import crontab
 
+# period for examining the status on the field
+INVOCATION_PERIOD = 5
+RESET_HOURS = '16, 0'
 CELERY_BEAT_SCHEDULE = {
-    # Executes every 30min
-    'pull_from_pubsub': {
-        'task': 'e_container.tasks.fetch_all_device_group_statuses',
-        'schedule': crontab(minute='*/30'),
+    # # Executes every 30min
+    # 'pull_from_pubsub': {
+    #     'task': 'e_container.tasks.fetch_all_device_group_statuses',
+    #     'schedule': crontab(minute='*/30'),
+    #     'relative': True
+    # },
+    'invocation': {
+        'task': 'e_container.tasks.invocation',
+        'schedule': crontab(minute='*/{}'.format(INVOCATION_PERIOD)),
         'relative': True
     },
+    'restart_routes': {
+        'task': 'e_container.tasks.reset_routes',
+        'schedule': crontab(minute=0, hour=RESET_HOURS),
+        'relative': True
+    }
 }
 
 # # GOOGLE

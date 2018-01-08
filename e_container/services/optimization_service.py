@@ -2,16 +2,24 @@ from ortools.constraint_solver import pywrapcp
 from ortools.constraint_solver import routing_enums_pb2
 
 from e_container.services.callbacks import distance_callback, demand_callback
+from e_container.services.data_service import DataService
+from e_container.utils.common_utils import CommonUtils
 
 
 class OptimizationService:
-    def __init__(self, locations, vehicles, demands, depot):
-        self.locations = [[float(loc.latitude), float(loc.longitude)] for loc in locations]
+    def __init__(self, locations, vehicles, demands, depot, start_location):
+        # when there is one depot
+        self.depot_index = 0
+        self.depot = (depot.location.latitude, depot.location.longitude)
+        self.location_ids = locations.values_list('id', flat=True)
+        self.locations = [self.depot] + DataService.extract_lat_lon(locations)
         self.vehicles = list(vehicles)
-        self.demands = list(demands.values())
-        self.depot = depot.location
-        # location_ids = list(locations.values_list('id', flat=True)).insert(0, self.depot.id)
-        routing = pywrapcp.RoutingModel(len(locations), len(vehicles), 0)
+        self.demands = [0] + list(demands.values())
+
+        start_locations = DataService.define_start_locations(vehicles, locations, start_location)
+        end_locations = [0] * len(vehicles)
+
+        routing = pywrapcp.RoutingModel(len(locations), len(vehicles), start_locations, end_locations)
         search_parameters = pywrapcp.RoutingModel_DefaultSearchParameters()
         search_parameters.first_solution_strategy = (
             routing_enums_pb2.FirstSolutionStrategy.PATH_CHEAPEST_ARC)
@@ -32,35 +40,44 @@ class OptimizationService:
         demand = "Demand"
         routing.AddDimension(self.demands_callback, slack_max, min(vehicle_capacity),
                              fix_start_cumul_to_zero, demand)
+
         self.routing = routing
-        self.assignment = routing.SolveWithParameters(search_parameters)
+
+        # loads recent routes and takes them in consideration when generating new
+        initial_routes = [CommonUtils.str_to_list(vehicle.last_route) for vehicle in vehicles if vehicle.last_route]
+        if len(initial_routes) == len(vehicles):
+            initial_assignment = routing.ReadAssignmentFromRoutes(initial_routes, True)
+            self.assignment = routing.SolveFromAssignmentWithParameters(initial_assignment, search_parameters)
+        else:
+            self.assignment = routing.SolveWithParameters(search_parameters)
 
     def optimize(self):
         solution = dict()
         if self.assignment:
-            for vehicle_nbr in range(len(self.vehicles)):
+            for vehicle_nbr, vehicle in enumerate(self.vehicles):
                 index = self.routing.Start(vehicle_nbr)
                 index_next = self.assignment.Value(self.routing.NextVar(index))
                 route = list()
-                route_dist = 0
+                route_distance = 0
                 route_demand = 0
 
                 while not self.routing.IsEnd(index_next):
                     node_index = self.routing.IndexToNode(index)
                     node_index_next = self.routing.IndexToNode(index_next)
-                    if node_index != self.depot:
-                        route.extend(node_index)
-                        # Add the distance to the next node.
-                        route_dist += self.dist_callback(node_index, node_index_next)
-                        # Add demand.
-                        route_demand += self.demands[node_index_next]
-                        index = index_next
-                        index_next = self.assignment.Value(self.routing.NextVar(index))
+                    route.append(self.location_ids[node_index])
+                    # Add the distance to the next node.
+                    route_distance += self.dist_callback(node_index, node_index_next)
+                    # Add demand.
+                    route_demand += self.demands[node_index_next]
+                    index = index_next
+                    index_next = self.assignment.Value(self.routing.NextVar(index))
 
                 node_index = self.routing.IndexToNode(index)
                 node_index_next = self.routing.IndexToNode(index_next)
-                route.extend(node_index)
-                route_dist += self.dist_callback(node_index, node_index_next)
+                route.append(self.location_ids[node_index])
+                route_distance += self.dist_callback(node_index, node_index_next)
 
-                solution[route] = (route_demand, route_dist)
+                solution[vehicle.id] = {'route': route, 'demand': route_demand, 'distance': route_distance}
+                vehicle.last_route = str(route)
+                vehicle.save()
         return solution

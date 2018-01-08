@@ -21,7 +21,7 @@ def update(request):
     # pubsub = PubSubService('Group_1_at_Hifzi_Bjelevca_64')
     # pubsub.pull_from_subscription(InputDataService.update_device_status)
 
-    tasks.fetch_all_device_group_statuses()
+    tasks.invocation()
     values = list()
     if request.body:
         request_body = CommonUtils.decode_request(request.body)

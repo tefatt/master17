@@ -7,3 +7,4 @@ from .device_group import DeviceGroupModel
 from .device import DeviceModel
 from .depot import DepotModel
 from .municipalty_depot import MunicipalityDepotModel
+from .start_location import StartLocationModel

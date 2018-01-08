@@ -11,7 +11,7 @@ class CreateDistanceCallback(object):
         for i, from_node in enumerate(locations):
             self.matrix[i] = {}
             for j, to_node in enumerate(locations):
-                if from_node == depot or to_node == depot or i == j:
+                if i == j:
                     self.matrix[i][j] = 0
                 else:
                     self.matrix[i][j] = DataService.calculate_distance(from_node, to_node)
