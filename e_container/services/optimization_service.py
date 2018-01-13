@@ -4,6 +4,7 @@ from ortools.constraint_solver import routing_enums_pb2
 from e_container.services.callbacks import distance_callback, demand_callback
 from e_container.services.data_service import DataService
 from e_container.utils.common_utils import CommonUtils
+from e_container.models.recent_data import RecentDataModel
 
 
 class OptimizationService:
@@ -19,7 +20,7 @@ class OptimizationService:
         start_locations = DataService.define_start_locations(vehicles, locations, start_location)
         end_locations = [0] * len(vehicles)
 
-        routing = pywrapcp.RoutingModel(len(locations), len(vehicles), start_locations, end_locations)
+        routing = pywrapcp.RoutingModel(locations.count(), vehicles.count(), start_locations, end_locations)
         search_parameters = pywrapcp.RoutingModel_DefaultSearchParameters()
         search_parameters.first_solution_strategy = (
             routing_enums_pb2.FirstSolutionStrategy.PATH_CHEAPEST_ARC)
@@ -44,7 +45,7 @@ class OptimizationService:
         self.routing = routing
 
         # loads recent routes and takes them in consideration when generating new
-        initial_routes = [CommonUtils.str_to_list(vehicle.last_route) for vehicle in vehicles if vehicle.last_route]
+        initial_routes = [CommonUtils.str_to_list(v.last_save.route) for v in vehicles if hasattr(v, 'last_save')]
         if len(initial_routes) == len(vehicles):
             initial_assignment = routing.ReadAssignmentFromRoutes(initial_routes, True)
             self.assignment = routing.SolveFromAssignmentWithParameters(initial_assignment, search_parameters)
@@ -78,6 +79,9 @@ class OptimizationService:
                 route_distance += self.dist_callback(node_index, node_index_next)
 
                 solution[vehicle.id] = {'route': route, 'demand': route_demand, 'distance': route_distance}
-                vehicle.last_route = str(route)
-                vehicle.save()
+
+                RecentDataModel.objects.get_or_create(vehicle=vehicle, defaults={'route': str(route),
+                                                                                 'demand': route_demand,
+                                                                                 'distance': route_distance})
+
         return solution

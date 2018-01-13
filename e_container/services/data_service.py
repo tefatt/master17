@@ -81,8 +81,8 @@ class DataService:
     def compute_mean_travel_time(municipality):
         durations = list()
         for vehicle in municipality.vehicle.all():
-            if vehicle.last_route:
-                locs = LocationModel.objects.filter(id__in=CommonUtils.str_to_list(vehicle.last_route))
+            if vehicle.last_save.route:
+                locs = LocationModel.objects.filter(id__in=CommonUtils.str_to_list(vehicle.last_save.route))
                 if len(locs) > 1:
                     from_loc, to_loc = (locs[0].latitude, locs[0].longitude), (locs[1].latitude, locs[1].longitude)
                     _, duration = DataService.calculate_distance(from_loc, to_loc, with_duration=True)
@@ -95,7 +95,7 @@ class DataService:
     def define_start_locations(vehicles, locations, start):
         start_positions = list()
         for vehicle in vehicles:
-            route = CommonUtils.str_to_list(vehicle.last_route) if vehicle.last_route else None
+            route = CommonUtils.str_to_list(vehicle.last_save.route) if hasattr(vehicle, 'last_save') else None
             start_positions.append(route[1]) if route and len(route) > 1 else start_positions.append(start.location.id)
 
         for i, el in enumerate(locations.values_list('id', flat=True)):
@@ -104,3 +104,8 @@ class DataService:
                     start_positions[j] = i
                     continue
         return start_positions
+
+    @staticmethod
+    def from_ids_to_coordinates(location_ids):
+        locations = LocationModel.objects.filter(id__in=location_ids)
+        return [(loc.latitude, loc.longitude) for loc in locations]

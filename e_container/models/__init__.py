@@ -8,3 +8,4 @@ from .device import DeviceModel
 from .depot import DepotModel
 from .municipalty_depot import MunicipalityDepotModel
 from .start_location import StartLocationModel
+from .recent_data import RecentDataModel
