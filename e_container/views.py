@@ -10,12 +10,10 @@ from e_container.models.recent_data import RecentDataModel
 from e_container.models.location import LocationModel
 
 
-@csrf_exempt
 def invocation(request):
     tasks.invocation()
 
 
-@csrf_exempt
 def reset_saved_routes(request):
     tasks.reset_saved_routes()
 
