@@ -7,6 +7,7 @@ from e_container.utils.common_utils import CommonUtils
 
 from e_container.models.device import DeviceModel
 from e_container.models.location import LocationModel
+from e_container.models.municipality import MunicipalityModel
 
 
 class DataService:
@@ -78,8 +79,9 @@ class DataService:
         return [(float(loc.latitude), float(loc.longitude)) for loc in locs]
 
     @staticmethod
-    def compute_mean_travel_time(municipality):
+    def compute_mean_travel_time(m_id):
         durations = list()
+        municipality = MunicipalityModel.objects.get(id=m_id)
         for vehicle in municipality.vehicle.all():
             if vehicle.last_save.route:
                 locs = LocationModel.objects.filter(id__in=CommonUtils.str_to_list(vehicle.last_save.route))
@@ -95,7 +97,8 @@ class DataService:
     def define_start_locations(vehicles, locations, start):
         start_positions = list()
         for vehicle in vehicles:
-            route = CommonUtils.str_to_list(vehicle.last_save.route) if hasattr(vehicle, 'last_save') else None
+            route = CommonUtils.str_to_list(vehicle.last_save.route) if hasattr(vehicle, 'last_save') \
+                                                                        and vehicle.last_save.route else None
             start_positions.append(route[1]) if route and len(route) > 1 else start_positions.append(start.location.id)
 
         for i, el in enumerate(locations.values_list('id', flat=True)):

@@ -13,4 +13,4 @@ class LocationModel(BaseModel):
     municipality = models.ForeignKey(MunicipalityModel, related_name='location')
 
     def __str__(self):
-        return "{} - {}".format(self.street, self.municipality)
+        return "{} {} - {}".format(self.street, self.street_number, self.municipality)

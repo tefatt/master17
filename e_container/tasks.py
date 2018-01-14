@@ -17,7 +17,7 @@ from e_container.models.recent_data import RecentDataModel
 def update_device_group_status(locations, vehicles, demands, depot, municipality):
     solver = OptimizationService(locations, vehicles, demands, depot, municipality.start_location)
     optimized_route_data = solver.optimize()
-    eta = DataService.compute_mean_travel_time(municipality)
+    eta = DataService.compute_mean_travel_time(municipality.id)
     municipality.next_invocation = timedelta(seconds=eta) + datetime.now()
     municipality.save()
     return optimized_route_data
