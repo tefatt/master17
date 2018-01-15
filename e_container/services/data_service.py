@@ -8,6 +8,9 @@ from e_container.utils.common_utils import CommonUtils
 from e_container.models.device import DeviceModel
 from e_container.models.location import LocationModel
 from e_container.models.municipality import MunicipalityModel
+from e_container.models.vehicle import VehicleModel
+from e_container.models.employee import EmployeeModel
+from e_container.models.recent_data import RecentDataModel
 
 
 class DataService:
@@ -112,3 +115,28 @@ class DataService:
     def from_ids_to_coordinates(location_ids):
         locations = LocationModel.objects.filter(id__in=location_ids)
         return [(loc.latitude, loc.longitude) for loc in locations]
+
+    @staticmethod
+    def update_map():
+        group_locs = list()
+        recent_data = RecentDataModel.objects.filter(route__isnull=False)
+        routes = recent_data.values_list('route', flat=True)
+        vehicle_ids = recent_data.values_list('vehicle', flat=True)
+        vehicles = VehicleModel.objects.filter(id__in=vehicle_ids)
+        for route in routes:
+            route = CommonUtils.str_to_list(route)
+            if len(route) <= 2:
+                continue
+            locs = LocationModel.objects.filter(id__in=route).values('latitude', 'longitude')
+            group_locs.append(locs)
+
+        markers = list()
+        for locs, vehicle in zip(group_locs, vehicles):
+            employee = EmployeeModel.objects.get(vehicle=vehicle)
+            marker = list()
+            content = "{} driven by {}".format(str(vehicle), str(employee))
+            [marker.append({"coords": {"lat": loc.get('latitude'), "lng": loc.get('longitude')},
+                            "content": content}) for loc in locs]
+            markers.append(marker)
+
+        return markers

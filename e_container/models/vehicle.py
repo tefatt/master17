@@ -10,8 +10,5 @@ class VehicleModel(BaseModel):
     type = models.CharField(max_length=225)
     municipality = models.ForeignKey(MunicipalityModel, related_name='vehicle')
 
-    def save(self, *args, **kwargs):
-        super(VehicleModel, self).save(*args, **kwargs)
-
     def __str__(self):
-        return "{} - {}".format(self.id, self.type)
+        return "Vehicle #{}".format(self.id)
