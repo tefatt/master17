@@ -15,10 +15,6 @@ def reset_saved_routes(request):
 
 
 def main_display(request):
-    # markers = DataService.update_map()
-    # color1, color2 = Color("#19A5A7"), Color("#9119A7")
-    # path_colors = list(map(Color.get_hex, color1.range_to(color2, len(markers))))
-    # return render(request, 'index.html', {'markers': markers, 'path_colors': path_colors})
     return render(request, 'index.html')
 
 

@@ -1,13 +1,8 @@
 function initMap(markers, path_colors) {
 
-    // if (markers === undefined) {
-    //     markers = eval($('#markers').data("markers"));
-    // }
-    // if (path_colors === undefined) {
-    //     path_colors = eval($('#path_colors').data("path_colors"));
-    // }
-    var directionsService = new google.maps.DirectionsService;
+    if (markers === undefined) return;
 
+    var directionsService = new google.maps.DirectionsService;
     // Map options center on Sarajevo
     var options = {
         center: {lat: 43.8627, lng: 18.4001},
