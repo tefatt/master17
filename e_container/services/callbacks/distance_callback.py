@@ -6,15 +6,23 @@ class CreateDistanceCallback(object):
 
     def __init__(self, locations, depot):
         """Initialize distance array."""
-        self.matrix = {}
+        try:
+            self.matrix = {}
 
-        for i, from_node in enumerate(locations):
-            self.matrix[i] = {}
-            for j, to_node in enumerate(locations):
-                if i == j:
-                    self.matrix[i][j] = 0
-                else:
-                    self.matrix[i][j] = DataService.calculate_distance(from_node, to_node)
+            visited_pairs = list()
+            for i, from_node in enumerate(locations):
+                self.matrix[i] = {}
+                for j, to_node in enumerate(locations):
+                    if i == j:
+                        self.matrix[i][j] = 0
+                    else:
+                        if (i, j) in visited_pairs:
+                            self.matrix[i][j] = self.matrix[j][i]
+                            continue
+                        self.matrix[i][j] = DataService.calculate_distance(from_node, to_node)
+                        visited_pairs.append((j, i))
+        except Exception:
+            X = 2
 
     def distance(self, i, j):
         return self.matrix[i][j]

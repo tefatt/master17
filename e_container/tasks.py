@@ -55,5 +55,5 @@ def invocation():
 
 
 @task()
-def reset_saved_routes():
+def reset_saved_data():
     RecentDataModel.objects.filter(vehicle__active=True).update(route=None, demand=None, distance=None)

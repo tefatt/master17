@@ -10,8 +10,8 @@ def invocation(request):
     tasks.invocation()
 
 
-def reset_saved_routes(request):
-    tasks.reset_saved_routes()
+def reset_saved_data(request):
+    tasks.reset_saved_data()
 
 
 def main_display(request):

@@ -9,21 +9,23 @@ from e_container.models.recent_data import RecentDataModel
 
 class OptimizationService:
     def __init__(self, locations, vehicles, demands, depot, start_location):
-        # when there is one depot
-        self.depot_index = 0
         self.depot = (depot.location.latitude, depot.location.longitude)
-        self.location_ids = locations.values_list('id', flat=True)
+        self.depot_id = depot.location.id
+        self.location_ids = [self.depot_id] + list(locations.values_list('id', flat=True))
         self.locations = [self.depot] + DataService.extract_lat_lon(locations)
         self.vehicles = list(vehicles)
         self.demands = [0] + list(demands.values())
 
-        start_locations = DataService.define_start_locations(vehicles, locations, start_location)
+        start_locations = DataService.define_start_locations(vehicles, self.location_ids, start_location)
         end_locations = [0] * len(vehicles)
 
-        routing = pywrapcp.RoutingModel(locations.count(), vehicles.count(), start_locations, end_locations)
+        routing = pywrapcp.RoutingModel(locations.count() + 1, vehicles.count(), start_locations, end_locations)
+
+        # define search parameters
         search_parameters = pywrapcp.RoutingModel_DefaultSearchParameters()
-        search_parameters.first_solution_strategy = (
-            routing_enums_pb2.FirstSolutionStrategy.PATH_CHEAPEST_ARC)
+        search_parameters.first_solution_strategy = routing_enums_pb2.FirstSolutionStrategy.PATH_CHEAPEST_ARC
+        search_parameters.time_limit_ms = 240000  # 4min
+        routing.CloseModelWithParameters(search_parameters)
 
         # Callback to the distance function.
         dist_between_locations = distance_callback.CreateDistanceCallback(self.locations, self.depot)

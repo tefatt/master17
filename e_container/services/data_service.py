@@ -26,6 +26,8 @@ class DataService:
                 for group in message_body.get("device_groups"):
                     if group.get("id") == device_group.id:
                         demand = DataService.calculate_group_demand(group.get('devices'))
+                        device_group.last_demand = demand
+                        device_group.save()
                         rrd.update_group({'group_demand': demand})
 
                         # update individual measurements
@@ -97,18 +99,18 @@ class DataService:
         return sum(durations) / len(durations)
 
     @staticmethod
-    def define_start_locations(vehicles, locations, start):
+    def define_start_locations(vehicles, location_ids, start):
         start_positions = list()
         for vehicle in vehicles:
             route = CommonUtils.str_to_list(vehicle.last_save.route) if hasattr(vehicle, 'last_save') \
                                                                         and vehicle.last_save.route else None
             start_positions.append(route[1]) if route and len(route) > 1 else start_positions.append(start.location.id)
 
-        for i, el in enumerate(locations.values_list('id', flat=True)):
-            for j, pos in enumerate(start_positions):
+        for i, el in enumerate(start_positions):
+            for j, pos in enumerate(location_ids):
                 if el == pos:
-                    start_positions[j] = i
-                    continue
+                    start_positions[i] = j
+                    break
         return start_positions
 
     @staticmethod
@@ -127,16 +129,18 @@ class DataService:
             route = CommonUtils.str_to_list(route)
             if len(route) <= 2:
                 continue
-            locs = LocationModel.objects.filter(id__in=route).values('latitude', 'longitude')
+            locs = LocationModel.objects.filter(id__in=route).values('latitude', 'longitude',
+                                                                     'device_group__last_demand')
             group_locs.append(locs)
 
         markers = list()
         for locs, vehicle in zip(group_locs, vehicles):
             employee = EmployeeModel.objects.get(vehicle=vehicle)
             marker = list()
-            content = "{} driven by {}".format(str(vehicle), str(employee))
+            content = "Served by {} driven by {}".format(str(vehicle), str(employee))
             [marker.append({"coords": {"lat": loc.get('latitude'), "lng": loc.get('longitude')},
-                            "content": content}) for loc in locs]
+                            "content": "Demand at group location: {}; {}".format(loc.get('device_group__last_demand'),
+                                                                                 content)}) for loc in locs]
             markers.append(marker)
 
         return markers
