@@ -136,10 +136,9 @@ class DataService:
             marker = list()
             content = "Served by {} driven by {}".format(str(vehicle), str(employee))
             [marker.append({"coords": {"lat": loc.get('latitude'), "lng": loc.get('longitude')}, "content":
-                "Location id: {} - Demand at group location: {}; {}".format(loc.get('id'),
-                                                                            loc.get('device_group__last_demand'),
-                                                                            content)}) for loc in
-             locs]
+                "Location id: {} - Demand at group loc: {}; {}".format(loc.get('id'),
+                                                                       round(loc.get('device_group__last_demand'), 2),
+                                                                       content)}) for loc in locs]
             markers.append(marker)
 
         return markers
