@@ -67,16 +67,13 @@ class DataService:
         return demand / len(group)
 
     @staticmethod
-    def calculate_distance(from_loc, to_loc, with_duration=False):
+    def calculate_distance(from_loc, to_loc):
         gmaps = googlemaps.Client(key=settings.GOOGLE_KEY)
         response = gmaps.distance_matrix((from_loc[0], from_loc[1]), (to_loc[0], to_loc[1]))
         for field in response.get("rows"):
+            result = field.get("elements")[0]
             # gets distance between two provided locations in meters
-            distance = field.get("elements")[0].get("distance").get("value")
-            if with_duration:
-                duration = field.get("elements")[0].get("duration").get("value")
-                return distance, duration
-            return distance
+            return result.get("distance").get("value"), result.get("duration").get("value")
         return None
 
     @staticmethod
@@ -129,7 +126,7 @@ class DataService:
             route = CommonUtils.str_to_list(route)
             if len(route) <= 2:
                 continue
-            locs = LocationModel.objects.filter(id__in=route).values('latitude', 'longitude',
+            locs = LocationModel.objects.filter(id__in=route).values('id', 'latitude', 'longitude',
                                                                      'device_group__last_demand')
             group_locs.append(locs)
 
@@ -138,9 +135,11 @@ class DataService:
             employee = EmployeeModel.objects.get(vehicle=vehicle)
             marker = list()
             content = "Served by {} driven by {}".format(str(vehicle), str(employee))
-            [marker.append({"coords": {"lat": loc.get('latitude'), "lng": loc.get('longitude')},
-                            "content": "Demand at group location: {}; {}".format(loc.get('device_group__last_demand'),
-                                                                                 content)}) for loc in locs]
+            [marker.append({"coords": {"lat": loc.get('latitude'), "lng": loc.get('longitude')}, "content":
+                "Location id: {} - Demand at group location: {}; {}".format(loc.get('id'),
+                                                                            loc.get('device_group__last_demand'),
+                                                                            content)}) for loc in
+             locs]
             markers.append(marker)
 
         return markers

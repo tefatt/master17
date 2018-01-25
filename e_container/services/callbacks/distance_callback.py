@@ -19,7 +19,7 @@ class CreateDistanceCallback(object):
                         if (i, j) in visited_pairs:
                             self.matrix[i][j] = self.matrix[j][i]
                             continue
-                        self.matrix[i][j] = DataService.calculate_distance(from_node, to_node)
+                        self.matrix[i][j], _ = DataService.calculate_distance(from_node, to_node)
                         visited_pairs.append((j, i))
         except Exception:
             X = 2

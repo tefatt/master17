@@ -23,8 +23,10 @@ class OptimizationService:
 
         # define search parameters
         search_parameters = pywrapcp.RoutingModel_DefaultSearchParameters()
-        search_parameters.first_solution_strategy = routing_enums_pb2.FirstSolutionStrategy.PATH_CHEAPEST_ARC
-        search_parameters.time_limit_ms = 240000  # 4min
+        search_parameters.first_solution_strategy = routing_enums_pb2.FirstSolutionStrategy.AUTOMATIC
+        search_parameters.time_limit_ms = 4 * 60 * 1000  # 4min
+        search_parameters.local_search_metaheuristic = (
+            routing_enums_pb2.LocalSearchMetaheuristic.AUTOMATIC)
         routing.CloseModelWithParameters(search_parameters)
 
         # Callback to the distance function.
@@ -79,6 +81,7 @@ class OptimizationService:
                 node_index = self.routing.IndexToNode(index)
                 node_index_next = self.routing.IndexToNode(index_next)
                 route.append(self.location_ids[node_index])
+                route.append(self.location_ids[node_index_next])
                 route_distance += self.dist_callback(node_index, node_index_next)
 
                 solution[vehicle.id] = {'route': route, 'demand': route_demand, 'distance': route_distance}
