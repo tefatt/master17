@@ -1,6 +1,7 @@
 from django.conf import settings
 import googlemaps
 import math
+from django.db.models import Case, When
 
 from e_container.services.rrdtool_service import RrdtoolService
 from e_container.utils.common_utils import CommonUtils
@@ -126,19 +127,21 @@ class DataService:
             route = CommonUtils.str_to_list(route)
             if len(route) <= 2:
                 continue
-            locs = LocationModel.objects.filter(id__in=route).values('id', 'latitude', 'longitude',
-                                                                     'device_group__last_demand')
-            group_locs.append(locs)
+            preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(route)])
+            locs = LocationModel.objects.filter(id__in=route).order_by(preserved)
+            group_locs.append(locs.values('id', 'latitude', 'longitude', 'device_group__last_demand'))
 
         markers = list()
         for locs, vehicle in zip(group_locs, vehicles):
             employee = EmployeeModel.objects.get(vehicle=vehicle)
             marker = list()
             content = "Served by {} driven by {}".format(str(vehicle), str(employee))
-            [marker.append({"coords": {"lat": loc.get('latitude'), "lng": loc.get('longitude')}, "content":
-                "Location id: {} - Demand at group loc: {}; {}".format(loc.get('id'),
-                                                                       round(loc.get('device_group__last_demand'), 2),
-                                                                       content)}) for loc in locs]
+            for loc in locs:
+                demand_info = "Location id: {} - Demand at group loc: {}  {}".format(loc.get('id'), round(loc.get(
+                    'device_group__last_demand'), 2) if loc.get('device_group__last_demand') else None, content)
+                info_content = {"coords": {"lat": loc.get('latitude'), "lng": loc.get('longitude')},
+                                "content": demand_info}
+                marker.append(info_content)
             markers.append(marker)
 
         return markers
