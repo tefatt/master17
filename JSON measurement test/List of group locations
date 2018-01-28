@@ -10,6 +10,53 @@ Adema Buca: 43.866448, 18.340083 (Deponija)
 #routes=18 calculation_duration=3:13
 {1: {'route': [6, 10, 9, 16], 'demand': 114.82718171774366, 'distance': 10294}, 2: {'route': [13, 14, 15, 11, 12], 'demand': 156.81894321192374, 'distance': 9225}, 3: {'route': [5, 17, 18, 19], 'demand': 114.02475492987088, 'distance': 8413}, 5: {'route': [3, 7, 20, 21], 'demand': 143.19238284688225, 'distance': 9890}}
 
+working routes:
+[2,11,13,12,7,3,15,19,21,8]
+[2,6,9,14,10,16,17,18,20,8]
 
+8000 containers in Canton Sarajevo; 413 593 population;
+7-15 vehicles;
+8-12m3 volume of one vehicle;
+1.1m3 volume of one container aprox;
 
+real use case: Novo Sarajevo:
+64 814 population which is 15.67% of CS which translates to 80 group locations when 15 containers per group location
+10 vehicles,
 
+presented use case Novo Sarajevo:
+20 group locations;
+3 vehicles;
+
+Total distance of all routes: 28635
+['Route for vehicle 0: 1 -> 4 -> 8 -> 9 -> 10 -> 6 -> 5 -> 3 -> 18 -> 19 -> 20 -> 15 -> 21 -> 8Distance: 11448Demand: 11.650552 \n', 'Route for vehicle 1: 1 -> 7 -> 3 -> 8Distance: 8677Demand: 6.756888 \n', 'Route for vehicle 2: 1 -> 11 -> 12 -> 13 -> 14 -> 20 -> 8Distance: 8510Demand: 8.671847999999999 \n', 'GREEDY_DESCENT SAVINGS #3']
+
+Total distance of all routes: 28635
+['Route for vehicle 0: 1 -> 11 -> 12 -> 13 -> 14 -> 20 -> 8Distance: 8510Demand: 8.671847999999999 \n', 'Route for vehicle 1: 1 -> 7 -> 4 -> 3 -> 8Distance: 8927Demand: 8.782096 \n', 'Route for vehicle 2: 1 -> 8 -> 9 -> 10 -> 6 -> 5 -> 3 -> 18 -> 19 -> 20 -> 15 -> 21 -> 8Distance: 11198Demand: 9.625343999999998 \n', 'GREEDY_DESCENT CHRISTOFIDES #3']
+
+Total distance of all routes: 27933
+['Route for vehicle 0: 1 -> 4 -> 8 -> 9 -> 10 -> 6 -> 5 -> 3 -> 18 -> 19 -> 20 -> 15 -> 21 -> 8Distance: 11448Demand: 11.650552 \n', 'Route for vehicle 1: 1 -> 7 -> 2 -> 11 -> 20 -> 8Distance: 9234Demand: 9.02212 \n', 'Route for vehicle 2: 1 -> 12 -> 13 -> 18 -> 8Distance: 7251Demand: 6.406616 \n', 'GUIDED_LOCAL_SEARCH SAVINGS #3']
+
+Total distance of all routes: 27933
+['Route for vehicle 0: 1 -> 7 -> 2 -> 11 -> 20 -> 8Distance: 9234Demand: 9.02212 \n', 'Route for vehicle 1: 1 -> 12 -> 13 -> 18 -> 8Distance: 7251Demand: 6.406616 \n', 'Route for vehicle 2: 1 -> 4 -> 8 -> 9 -> 10 -> 6 -> 5 -> 3 -> 18 -> 19 -> 20 -> 15 -> 21 -> 8Distance: 11448Demand: 11.650552 \n', 'GUIDED_LOCAL_SEARCH CHRISTOFIDES #3']
+
+Total distance of all routes: 28202
+['Route for vehicle 0: 1 -> 12 -> 13 -> 14 -> 15 -> 21 -> 8Distance: 8032Demand: 7.025856 \n', 'Route for vehicle 1: 1 -> 20 -> 19 -> 18 -> 3 -> 5 -> 6 -> 10 -> 9 -> 8 -> 3 -> 8Distance: 11319Demand: 11.5416 \n', 'Route for vehicle 2: 1 -> 7 -> 4 -> 11 -> 20 -> 8Distance: 8851Demand: 8.511832 \n', 'TABU_SEARCH SAVINGS #3']
+
+Total distance of all routes: 27933
+['Route for vehicle 0: 1 -> 4 -> 8 -> 9 -> 10 -> 6 -> 5 -> 3 -> 18 -> 19 -> 20 -> 15 -> 21 -> 8Distance: 11448Demand: 11.650552 \n', 'Route for vehicle 1: 1 -> 7 -> 2 -> 11 -> 20 -> 8Distance: 9234Demand: 9.02212 \n', 'Route for vehicle 2: 1 -> 12 -> 13 -> 18 -> 8Distance: 7251Demand: 6.406616 \n', 'TABU_SEARCH CHRISTOFIDES #3']
+
+No solution found."
+" GREEDY_DESCENT GLOBAL_CHEAPEST_ARC #3
+['GREEDY_DESCENT GLOBAL_CHEAPEST_ARC #3']
+
+Total distance of all routes: 29049
+['Route for vehicle 0: 1 -> 7 -> 8 -> 9 -> 10 -> 4 -> 20 -> 8Distance: 9552Demand: 8.902007999999999 \n', 'Route for vehicle 1: 1 -> 12 -> 13 -> 18 -> 8Distance: 7251Demand: 6.406616 \n', 'Route for vehicle 2: 1 -> 2 -> 11 -> 6 -> 5 -> 3 -> 18 -> 19 -> 20 -> 15 -> 21 -> 8Distance: 12246Demand: 11.770663999999998 \n', 'GREEDY_DESCENT LOCAL_CHEAPEST_ARC #3']
+No solution found."
+" GUIDED_LOCAL_SEARCH GLOBAL_CHEAPEST_ARC #3
+['GUIDED_LOCAL_SEARCH GLOBAL_CHEAPEST_ARC #3']
+
+Total distance of all routes: 27933
+['Route for vehicle 0: 1 -> 7 -> 2 -> 11 -> 20 -> 8Distance: 9234Demand: 9.02212 \n', 'Route for vehicle 1: 1 -> 4 -> 8 -> 9 -> 10 -> 6 -> 5 -> 3 -> 18 -> 19 -> 20 -> 15 -> 21 -> 8Distance: 11448Demand: 11.650552 \n', 'Route for vehicle 2: 1 -> 12 -> 13 -> 18 -> 8Distance: 7251Demand: 6.406616 \n', 'GUIDED_LOCAL_SEARCH LOCAL_CHEAPEST_ARC #3']
+No solution found."
+" TABU_SEARCH GLOBAL_CHEAPEST_ARC #3
+['TABU_SEARCH GLOBAL_CHEAPEST_ARC #3']

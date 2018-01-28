@@ -6,25 +6,37 @@
                 {
                     "device_id": 1,
                     "measurements": {
-                        "distance": 50
+                        "distance": 50,
+                        "battery_level": 10,
+                        "temperature": 14,
+                        "humidity": 7
                     }
                 },
                 {
                     "device_id": 6,
                     "measurements": {
-                        "distance": 30.7
+                        "distance": 30.7,
+                        "battery_level": 60,
+                        "temperature": 30,
+                        "humidity": 1
                     }
                 },
                 {
                     "device_id": 7,
                     "measurements": {
-                        "distance": 77.3
+                        "distance": 77.3,
+                        "battery_level": 50,
+                        "temperature": 30,
+                        "humidity": 1
                     }
                 },
                 {
                     "device_id": 8,
                     "measurements": {
-                        "distance": 4.7
+                        "distance": 4.7,
+                        "battery_level": 80,
+                        "temperature": 30,
+                        "humidity": 1
                     }
                 }
             ]
@@ -35,13 +47,19 @@
                 {
                     "device_id": 2,
                     "measurements": {
-                        "distance": 76.1
+                        "distance": 76.1,
+                        "battery_level": 70,
+                        "temperature": 14,
+                        "humidity": 7
                     }
                 },
                 {
                     "device_id": 9,
                     "measurements": {
-                        "distance": 19.2
+                        "distance": 19.2,
+                        "battery_level": 60,
+                        "temperature": 30,
+                        "humidity": 1
                     }
                 }
             ]
@@ -52,19 +70,28 @@
                 {
                     "device_id": 3,
                     "measurements": {
-                        "distance": 40.6
+                        "distance": 40.6,
+                        "battery_level": 76,
+                        "temperature": 14,
+                        "humidity": 7
                     }
                 },
                 {
                     "device_id": 10,
                     "measurements": {
-                        "distance": 23.1
+                        "distance": 23.1,
+                        "battery_level": 60,
+                        "temperature": 30,
+                        "humidity": 1
                     }
                 },
                 {
                     "device_id": 11,
                     "measurements": {
-                        "distance": 21.5
+                        "distance": 21.5,
+                        "battery_level": 50,
+                        "temperature": 30,
+                        "humidity": 1
                     }
                 }
             ]
@@ -75,13 +102,19 @@
                 {
                     "device_id": 4,
                     "measurements": {
-                        "distance": 22.7
+                        "distance": 22.7,
+                        "battery_level": 24,
+                        "temperature": 14,
+                        "humidity": 7
                     }
                 },
                 {
                     "device_id": 12,
                     "measurements": {
-                        "distance": 14.4
+                        "distance": 1.4,
+                        "battery_level": 38,
+                        "temperature": 30,
+                        "humidity": 1
                     }
                 }
             ]
@@ -92,7 +125,10 @@
                 {
                     "device_id": 4,
                     "measurements": {
-                        "distance": 26.3
+                        "distance": 26.3,
+                        "battery_level": 24,
+                        "temperature": 14,
+                        "humidity": 7
                     }
                 }
             ]
@@ -103,13 +139,19 @@
                 {
                     "device_id": 13,
                     "measurements": {
-                        "distance": 21.7
+                        "distance": 21.7,
+                        "battery_level": 24,
+                        "temperature": 14,
+                        "humidity": 7
                     }
                 },
                 {
                     "device_id": 15,
                     "measurements": {
-                        "distance": 10.4
+                        "distance": 1.4,
+                        "battery_level": 24,
+                        "temperature": 14,
+                        "humidity": 7
                     }
                 }
             ]
@@ -120,7 +162,10 @@
                 {
                     "device_id": 14,
                     "measurements": {
-                        "distance": 19.2
+                        "distance": 19.2,
+                        "battery_level": 24,
+                        "temperature": 14,
+                        "humidity": 7
                     }
                 }
             ]
@@ -131,13 +176,19 @@
                 {
                     "device_id": 16,
                     "measurements": {
-                        "distance": 12.1
+                        "distance": 12.1,
+                        "battery_level": 24,
+                        "temperature": 14,
+                        "humidity": 7
                     }
                 },
                 {
                     "device_id": 17,
                     "measurements": {
-                        "distance": 85.1
+                        "distance": 8.1,
+                        "battery_level": 24,
+                        "temperature": 14,
+                        "humidity": 7
                     }
                 }
             ]
@@ -148,7 +199,10 @@
                 {
                     "device_id": 18,
                     "measurements": {
-                        "distance": 50.7
+                        "distance": 50.7,
+                        "battery_level": 24,
+                        "temperature": 14,
+                        "humidity": 7
                     }
                 }
             ]
@@ -159,7 +213,10 @@
                 {
                     "device_id": 19,
                     "measurements": {
-                        "distance": 30.6
+                        "distance": 3.6,
+                        "battery_level": 24,
+                        "temperature": 14,
+                        "humidity": 7
                     }
                 }
             ]
@@ -170,7 +227,10 @@
                 {
                     "device_id": 20,
                     "measurements": {
-                        "distance": 8.8
+                        "distance": 8.8,
+                        "battery_level": 24,
+                        "temperature": 14,
+                        "humidity": 7
                     }
                 }
             ]
@@ -181,7 +241,10 @@
                 {
                     "device_id": 21,
                     "measurements": {
-                        "distance": 35.6
+                        "distance": 35.6,
+                        "battery_level": 24,
+                        "temperature": 14,
+                        "humidity": 7
                     }
                 }
             ]
@@ -192,19 +255,28 @@
                 {
                     "device_id": 22,
                     "measurements": {
-                        "distance": 14.2
+                        "distance": 14.2,
+                        "battery_level": 24,
+                        "temperature": 14,
+                        "humidity": 7
                     }
                 },
                 {
                     "device_id": 23,
                     "measurements": {
-                        "distance": 5.9
+                        "distance": 5.9,
+                        "battery_level": 24,
+                        "temperature": 14,
+                        "humidity": 7
                     }
                 },
                 {
                     "device_id": 24,
                     "measurements": {
-                        "distance": 40.6
+                        "distance": 40.6,
+                        "battery_level": 24,
+                        "temperature": 14,
+                        "humidity": 7
                     }
                 }
             ]
@@ -215,7 +287,10 @@
                 {
                     "device_id": 25,
                     "measurements": {
-                        "distance": 20.6
+                        "distance": 20.6,
+                        "battery_level": 24,
+                        "temperature": 14,
+                        "humidity": 7
                     }
                 }
             ]
@@ -226,7 +301,10 @@
                 {
                     "device_id": 26,
                     "measurements": {
-                        "distance": 18.6
+                        "distance": 18.6,
+                        "battery_level": 24,
+                        "temperature": 14,
+                        "humidity": 7
                     }
                 }
             ]
@@ -237,21 +315,30 @@
                 {
                     "device_id": 27,
                     "measurements": {
-                        "distance": 6.7
+                        "distance": 6.7,
+                        "battery_level": 24,
+                        "temperature": 14,
+                        "humidity": 7
                     }
                 },
                 {
                     "device_id": 28,
                     "measurements": {
-                        "distance": 31.1
+                        "distance": 9.1,
+                        "battery_level": 24,
+                        "temperature": 14,
+                        "humidity": 7
                     }
                 },
                 {
                     "device_id": 29,
                     "measurements": {
-                        "distance": 28.1
+                        "distance": 28.1,
+                        "battery_level": 24,
+                        "temperature": 14,
+                        "humidity": 7
+                    }
                 }
-            }
             ]
         },
         {   
@@ -260,7 +347,10 @@
                 {
                     "device_id": 30,
                     "measurements": {
-                        "distance": 24.6
+                        "distance": 24.6,
+                        "battery_level": 24,
+                        "temperature": 14,
+                        "humidity": 7
                     }
                 }
             ]
@@ -271,7 +361,10 @@
                 {
                     "device_id": 31,
                     "measurements": {
-                        "distance": 8.9
+                        "distance": 8.9,
+                        "battery_level": 24,
+                        "temperature": 14,
+                        "humidity": 7
                     }
                 }
             ]
@@ -282,13 +375,19 @@
                 {
                     "device_id": 32,
                     "measurements": {
-                        "distance": 25.6
+                        "distance": 25.6,
+                        "battery_level": 24,
+                        "temperature": 14,
+                        "humidity": 7
                     }
                 },
                 {
                     "device_id": 33,
                     "measurements": {
-                        "distance": 15.6
+                        "distance": 15.6,
+                        "battery_level": 24,
+                        "temperature": 14,
+                        "humidity": 7
                     }
                 }
             ]
@@ -299,7 +398,10 @@
                 {
                     "device_id": 34,
                     "measurements": {
-                        "distance": 8.9
+                        "distance": 8.9,
+                        "battery_level": 24,
+                        "temperature": 14,
+                        "humidity": 7
                     }
                 }
             ]
@@ -310,7 +412,10 @@
                 {
                     "device_id": 35,
                     "measurements": {
-                        "distance": 18.9
+                        "distance": 18.9,
+                        "battery_level": 24,
+                        "temperature": 14,
+                        "humidity": 7
                     }
                 }
             ]

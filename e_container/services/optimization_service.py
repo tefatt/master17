@@ -49,7 +49,7 @@ class OptimizationService:
         self.routing = routing
 
         # loads recent routes and takes them in consideration when generating new
-        initial_routes = [CommonUtils.str_to_list(v.last_save.route) for v in vehicles if
+        initial_routes = [CommonUtils.eval_type(v.last_save.route) for v in vehicles if
                           hasattr(v, 'last_save') and v.last_save.route]
         if len(initial_routes) == len(vehicles):
             initial_assignment = routing.ReadAssignmentFromRoutes(initial_routes, True)

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Map</title>
+    {% load staticfiles %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="{% static "e_container/jquery.flot.js" %}"></script>
+    <script src="{% static "e_container/jquery.flot.time.js" %}"></script>
+    <script src="{% static "e_container/rrd_plot.js" %}"></script>
+    <script src="{% static "e_container/init_map.js" %}"></script>
+
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static "e_container/flot_style.css" %}">
+    <link rel="stylesheet" href="{% static "e_container/base_style.css" %}">
+
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+</head>
+<body>
+{% block body %}
+{% endblock %}
+</body>
+</html>

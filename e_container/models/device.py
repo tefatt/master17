@@ -24,7 +24,10 @@ class DeviceModel(BaseModel):
     id = models.AutoField(primary_key=True)
     group = models.ForeignKey(DeviceGroupModel, null=True, blank=True)
     status = models.IntegerField(choices=DEVICE_STATUSES, default=NOT_INSTALLED)
-    max_capacity = models.FloatField(help_text='Max capacity of the container it is installed on')
+    max_surface = models.FloatField(default=1.096,
+                                    help_text="Max surface area of the respective container. Unit of measurement is m2")
+    max_height = models.FloatField(default=141,
+                                   help_text="Max height of the container it's installed on. Unit of measurement is cm")
     type = models.IntegerField(choices=DEVICE_TYPES, default=STANDARD)
 
     def save(self, *args, **kwargs):
@@ -33,4 +36,4 @@ class DeviceModel(BaseModel):
         RrdtoolService(str(self.group), self.group.id)
 
     def __str__(self):
-        return "Device {}: {} - Capacity: {}".format(self.id, self.group, self.max_capacity)
+        return "Device {}: {} - Capacity: {}m3".format(self.id, self.group, self.max_height / 100 * self.max_surface)

@@ -10,9 +10,10 @@ DEPOT_LOCATION = {}
 # defining measurement variable properties with their min and max
 RRD_DIRECTORY = 'RRD_files'
 ROUTES_DIRECTORY = 'Routes'
-MEASUREMENT_VARIABLES = {'distance': [0, 100], 'temperature': [-10, 60], 'humidity': [0, 20],
-                         'battery_level': [0, 100], 'group_demand': [0, 100]}
+# MEASUREMENT_VARIABLES = {'distance': [0, 141], 'temperature': [-10, 60], 'humidity': [0, 20],
+#                          'battery_level': [0, 100], 'group_demand': [0, 10]}
 
+MEASUREMENT_VARIABLES = {'distance': [0, 141], 'group_demand': [0, 10]}
 # GOOGLE
 # os.environ["GOOGLE_CLOUD_PROJECT"] = "econtainer-1498514901196"
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = BASE_DIR + '/eContainer-f03bac2d8a5e.json'

@@ -1,18 +1,50 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/html">
-<head>
-    <title>Map</title>
-    {% load staticfiles %}
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTBWlYTjHXsnncux0qHVTroPWt5EWT6YM&callback=initMap"
-            async defer></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="{% static "e_container/base_style.css" %}">
-    <script src="{% static "e_container/init_map.js" %}"></script>
+{% include 'base.html' %}
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTBWlYTjHXsnncux0qHVTroPWt5EWT6YM&callback=initMap"
+        async defer></script>
+<div class="container example5">
+    <nav role="navigation" class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar5">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{% url 'eContainer:main_display' %}"><img style="width: 14px;">eContainer
+                </a>
+            </div>
+            <div id="navbar5" class="navbar-collapse collapse">
+                <a href="http://127.0.0.1:8000/admin">Admin Panel</a>
+                <div class="dropdown">
+                    <button class="dropbtn">Municipalities
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                    {% for mun in municipalities %}
+                        <div class="dropdown-content">
+                            <a>{{ mun.name }}</a>
+                            <div class="dropdown-content">
+                                {% for dev_group in mun.device_groups %}
+                                    {% if dev_group.location__street_number %}
+                                        <a href={% url 'eContainer:data_readings' %}?dev_group_id={{ dev_group.id }}>{{ dev_group.location__street }} {{ dev_group.location__street_number }}</a>
+                                    {% else %}
+                                        <a href={% url 'eContainer:data_readings' %}?dev_group_id={{ dev_group.id }}>{{ dev_group.location__street }}</a>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
 
-    <meta name="viewport" content="initial-scale=1.0">
-    <meta charset="utf-8">
-</head>
-<body>
+                <div id="floating-panel">
+                    <b>Disposal routes: </b>
+                    <select id="route-selector"> </select>
+                </div>
+
+            </div>
+        </div>
+    </nav>
+</div>
 <div id="map"></div>
 <div id="floating-panel">
     <b>Disposal routes: </b>
@@ -21,5 +53,3 @@
 <script>
     initMap();
 </script>
-</body>
-</html>

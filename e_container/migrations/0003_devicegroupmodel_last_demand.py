@@ -17,4 +17,25 @@ class Migration(migrations.Migration):
             name='last_demand',
             field=models.FloatField(editable=False, null=True),
         ),
+        migrations.RemoveField(
+            model_name='devicemodel',
+            name='max_capacity',
+        ),
+        migrations.AddField(
+            model_name='devicemodel',
+            name='max_height',
+            field=models.FloatField(default=141,
+                                    help_text="Max height of the container it's installed on. Unit of measurement is cm"),
+        ),
+        migrations.AddField(
+            model_name='devicemodel',
+            name='max_surface',
+            field=models.FloatField(default=1.096,
+                                    help_text='Max surface area of the respective container. Unit of measurement is m2'),
+        ),
+        migrations.AlterField(
+            model_name='vehiclemodel',
+            name='capacity',
+            field=models.FloatField(help_text='Unit of measurement is m3'),
+        ),
     ]

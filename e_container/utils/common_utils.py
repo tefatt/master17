@@ -10,8 +10,8 @@ class CommonUtils:
         return json.loads(body_unicode)
 
     @staticmethod
-    def str_to_list(string):
-        return ast.literal_eval(string)
+    def eval_type(data):
+        return ast.literal_eval(data)
 
     @staticmethod
     def save_to_file(data, file):

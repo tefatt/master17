@@ -26,7 +26,8 @@ class DataService:
             if message_body.get("device_groups"):
                 for group in message_body.get("device_groups"):
                     if group.get("id") == device_group.id:
-                        demand = DataService.calculate_group_demand(group.get('devices'))
+                        # abstracted demand can be used later for better prioritization after a route has been generated
+                        demand, abstracted_demand = DataService.calculate_group_demand(group.get('devices'))
                         device_group.last_demand = demand
                         device_group.save()
                         rrd.update_group({'group_demand': demand})
@@ -48,24 +49,29 @@ class DataService:
         def scale_measurements(measurements):
             # TODO define scale functions
             result = 0
+            result_volume = 0
             for data_type, value in measurements.items():
                 if data_type == 'distance':
-                    if value > max_capacity:
+                    if value > max_height:
                         # in case of bad reading and when testing. Add logging here
-                        value = max_capacity
-                    result += 100 * math.exp(-1 * (max_capacity - value) / max_capacity)
+                        value = max_height
+                    result += 100 * math.exp(-1 * (max_height - value) / max_height)
+                    result_volume += (max_height - value) / 100 * max_surface
                 elif data_type == 'temperature':
                     pass
                 elif data_type == 'humidity':
                     pass
-            return result
+            return result, result_volume
 
-        demand = 0.
+        demand, real_volume_demand = 0., 0.
         for data in group:
-            max_capacity = DeviceModel.objects.get(id=data.get('device_id')).max_capacity
+            device = DeviceModel.objects.get(id=data.get('device_id'))
+            max_height, max_surface = device.max_height, device.max_surface
             device_measurements = data.get('measurements')
-            demand += scale_measurements(device_measurements)
-        return demand / len(group)
+            demand_temp, real_volume_demand_temp = scale_measurements(device_measurements)
+            demand += demand_temp
+            real_volume_demand += real_volume_demand_temp
+        return real_volume_demand, demand / len(group)
 
     @staticmethod
     def calculate_distance(from_loc, to_loc):
@@ -87,10 +93,10 @@ class DataService:
         municipality = MunicipalityModel.objects.get(id=m_id)
         for vehicle in municipality.vehicle.all():
             if vehicle.last_save.route:
-                locs = LocationModel.objects.filter(id__in=CommonUtils.str_to_list(vehicle.last_save.route))
+                locs = LocationModel.objects.filter(id__in=CommonUtils.eval_type(vehicle.last_save.route))
                 if len(locs) > 1:
                     from_loc, to_loc = (locs[0].latitude, locs[0].longitude), (locs[1].latitude, locs[1].longitude)
-                    _, duration = DataService.calculate_distance(from_loc, to_loc, with_duration=True)
+                    _, duration = DataService.calculate_distance(from_loc, to_loc)
                 else:
                     duration = None
                 durations.append(duration) if duration else 0
@@ -100,8 +106,8 @@ class DataService:
     def define_start_locations(vehicles, location_ids, start):
         start_positions = list()
         for vehicle in vehicles:
-            route = CommonUtils.str_to_list(vehicle.last_save.route) if hasattr(vehicle, 'last_save') \
-                                                                        and vehicle.last_save.route else None
+            route = CommonUtils.eval_type(vehicle.last_save.route) if hasattr(vehicle, 'last_save') \
+                                                                      and vehicle.last_save.route else None
             start_positions.append(route[1]) if route and len(route) > 1 else start_positions.append(start.location.id)
 
         for i, el in enumerate(start_positions):
@@ -124,7 +130,7 @@ class DataService:
         vehicle_ids = recent_data.values_list('vehicle', flat=True)
         vehicles = VehicleModel.objects.filter(id__in=vehicle_ids)
         for route in routes:
-            route = CommonUtils.str_to_list(route)
+            route = CommonUtils.eval_type(route)
             if len(route) <= 2:
                 continue
             preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(route)])
