@@ -1,6 +1,10 @@
 {% include 'base.html' %}
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTBWlYTjHXsnncux0qHVTroPWt5EWT6YM&callback=initMap"
         async defer></script>
+{% load staticfiles %}
+<link rel="stylesheet" href="{% static "e_container/base_style.css" %}">
+<script src="{% static "e_container/init_map.js" %}"></script>
+
 <div class="container example5">
     <nav role="navigation" class="navbar navbar-default">
         <div class="container-fluid">

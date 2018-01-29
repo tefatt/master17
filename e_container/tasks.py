@@ -35,7 +35,7 @@ def fetch_all_device_group_statuses(municipality):
         for location in locations:
             demand = DataService.update_device_status(message, location.device_group)
             group_dem[location.device_group.id] = demand
-        # pubsub.acknowledge_pull(ack_id)
+        pubsub.acknowledge_pull(ack_id)
         update_device_group_status(locations, vehicles, group_dem, depot, municipality)
         # chord(update_device_group_status.s(locations, vehicles, group_dem, depot))(update_template_display.s())
 

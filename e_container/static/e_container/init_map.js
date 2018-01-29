@@ -12,6 +12,10 @@ function initMap(markers) {
     // New map
     var map = new google.maps.Map(document.getElementById('map'), options);
 
+    if (markers.length===0){
+        return;
+    }
+
     // Loop through markers
     for (var x = 0; x < markers.length; x++) {
         var node = document.createElement("option");
