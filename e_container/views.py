@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseBadRequest
 import json
+from django.db.models import Q
 
 from e_container import tasks
 from e_container.utils.common_utils import CommonUtils
@@ -9,6 +10,7 @@ from e_container.services.rrdtool_service import RrdtoolService
 from e_container.services.data_service import DataService
 from e_container.models.municipality import MunicipalityModel
 from e_container.models.device_group import DeviceGroupModel
+from e_container.models.vehicle import VehicleModel
 
 
 def invocation(request):
@@ -30,11 +32,23 @@ def main_display(request):
         device_groups = DeviceGroupModel.objects.filter(location__municipality_id=mun['id']). \
             values('id', 'location__street', 'location__street_number')
         mun['device_groups'] = list(device_groups)
-    return render(request, 'index.html', {'municipalities': list(municipalities)})
+        vehicles = VehicleModel.objects.filter(Q(municipality=mun['id']), Q(last_save__demand__gt=0))
+        mun['vehicle_indexes'] = [i for i, veh in enumerate(vehicles)]
+    mun_markers = DataService.update_map()
+    return render(request, 'index.html', {'municipalities': list(municipalities), 'mun_markers': mun_markers})
 
 
 def return_new_routes(request):
-    markers = DataService.update_map()
+    mun_markers = DataService.update_map()
+    return JsonResponse({'mun_markers': mun_markers})
+
+
+def return_route(request):
+    mun_name = request.GET.get('mun_name')
+    if not mun_name:
+        return HttpResponseBadRequest
+    route_index = request.GET.get('route_index', 0)
+    markers = DataService.fetch_route(mun_name, route_index)
     return JsonResponse({'markers': markers})
 
 

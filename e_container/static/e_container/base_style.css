@@ -19,6 +19,19 @@ nav{
     Helvetica, sans-serif;
 }
 
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -1px;
+}
+/*#map {*/
+    /*z-index: -1;*/
+/*}*/
+
 /*#floating-panel {*/
     /*position: absolute;*/
     /*top: 10px;*/

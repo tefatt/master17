@@ -1,7 +1,7 @@
 from django.conf import settings
 import googlemaps
 import math
-from django.db.models import Case, When
+from django.db.models import Case, When, Q
 
 from e_container.services.rrdtool_service import RrdtoolService
 from e_container.utils.common_utils import CommonUtils
@@ -39,7 +39,7 @@ class DataService:
                             rrd.update_group(data.get("measurements"))
                         return demand
         except Exception as e:
-            X = True
+            X = e
         return rrd.get_last_value('group_demand')
 
     @staticmethod
@@ -124,30 +124,51 @@ class DataService:
 
     @staticmethod
     def update_map():
-        group_locs = list()
-        recent_data = RecentDataModel.objects.filter(route__isnull=False)
-        routes = recent_data.values_list('route', flat=True)
-        vehicle_ids = recent_data.values_list('vehicle', flat=True)
-        vehicles = VehicleModel.objects.filter(id__in=vehicle_ids)
-        for route in routes:
-            route = CommonUtils.eval_type(route)
-            if len(route) <= 2:
-                continue
-            preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(route)])
-            locs = LocationModel.objects.filter(id__in=route).order_by(preserved)
-            group_locs.append(locs.values('id', 'latitude', 'longitude', 'device_group__last_demand'))
+        mun_markers = dict()
+        for mun in MunicipalityModel.objects.all():
+            group_locs = list()
+            recent_data = RecentDataModel.objects.filter(Q(route__isnull=False), Q(vehicle__municipality=mun))
+            routes = recent_data.values_list('route', flat=True)
+            vehicle_ids = recent_data.values_list('vehicle', flat=True)
+            vehicles = VehicleModel.objects.filter(id__in=vehicle_ids)
+            for route in routes:
+                locs = DataService.helper_route_evaluation(route)
+                if not locs:
+                    continue
+                group_locs.append(locs.values('id', 'latitude', 'longitude', 'device_group__last_demand'))
 
+            markers = list()
+            for locs, vehicle in zip(group_locs, vehicles):
+                markers = DataService.helper_route_mapping(locs, vehicle)
+            mun_markers[mun.name] = markers
+        return mun_markers
+
+    @staticmethod
+    def fetch_route(mun_name, route_index):
+        vehicle = VehicleModel.objects.filter(municipality__name=mun_name)[route_index]
+        route = vehicle.last_save.route
+        locs = DataService.helper_route_evaluation(route)
+        return DataService.helper_route_mapping(locs, vehicle)
+
+    @staticmethod
+    def helper_route_evaluation(route):
+        route = CommonUtils.eval_type(route)
+        if len(route) <= 2:
+            return None
+        preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(route)])
+        return LocationModel.objects.filter(id__in=route).order_by(preserved)
+
+    @staticmethod
+    def helper_route_mapping(locs, vehicle):
         markers = list()
-        for locs, vehicle in zip(group_locs, vehicles):
-            employee = EmployeeModel.objects.get(vehicle=vehicle)
-            marker = list()
-            content = "Served by {} driven by {}".format(str(vehicle), str(employee))
-            for loc in locs:
-                demand_info = "Location id: {} - Demand at group loc: {}  {}".format(loc.get('id'), round(loc.get(
-                    'device_group__last_demand'), 2) if loc.get('device_group__last_demand') else None, content)
-                info_content = {"coords": {"lat": loc.get('latitude'), "lng": loc.get('longitude')},
-                                "content": demand_info}
-                marker.append(info_content)
-            markers.append(marker)
-
+        employee = EmployeeModel.objects.get(vehicle=vehicle)
+        marker = list()
+        content = "Served by {} driven by {}".format(str(vehicle), str(employee))
+        for loc in locs:
+            demand_info = "Location id: {} - Demand at group loc: {}  {}".format(loc.get('id'), round(loc.get(
+                'device_group__last_demand'), 2) if loc.get('device_group__last_demand') else None, content)
+            info_content = {"coords": {"lat": loc.get('latitude'), "lng": loc.get('longitude')},
+                            "content": demand_info}
+            marker.append(info_content)
+        markers.append(marker)
         return markers

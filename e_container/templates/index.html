@@ -1,59 +1,72 @@
 {% include 'base.html' %}
+{% load staticfiles %}
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTBWlYTjHXsnncux0qHVTroPWt5EWT6YM&callback=initMap"
         async defer></script>
-{% load staticfiles %}
 <link rel="stylesheet" href="{% static "e_container/base_style.css" %}">
 <script src="{% static "e_container/init_map.js" %}"></script>
-
-<div class="container example5">
-    <nav role="navigation" class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar5">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="{% url 'eContainer:main_display' %}"><img style="width: 14px;">eContainer
-                </a>
-            </div>
-            <div id="navbar5" class="navbar-collapse collapse">
-                <a href="http://127.0.0.1:8000/admin">Admin Panel</a>
-                <div class="dropdown">
-                    <button class="dropbtn">Municipalities
-                        <i class="fa fa-caret-down"></i>
-                    </button>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="{% url 'eContainer:main_display' %}">eContainer</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="http://127.0.0.1:8000/admin">Admin Panel</a></li>
+            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown">Field Data<span class="caret"></span></a>
+                <ul class="dropdown-menu">
                     {% for mun in municipalities %}
-                        <div class="dropdown-content">
-                            <a>{{ mun.name }}</a>
-                            <div class="dropdown-content">
+                        <li class="dropdown-submenu">
+                            <a class="test" tabindex="-1">{{ mun.name }}<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
                                 {% for dev_group in mun.device_groups %}
                                     {% if dev_group.location__street_number %}
-                                        <a href={% url 'eContainer:data_readings' %}?dev_group_id={{ dev_group.id }}>{{ dev_group.location__street }} {{ dev_group.location__street_number }}</a>
+                                        <li><a tabindex="-1"
+                                               href={% url 'eContainer:data_readings' %}?dev_group_id={{ dev_group.id }}>{{ dev_group.location__street }} {{ dev_group.location__street_number }}</a>
+                                        </li>
                                     {% else %}
-                                        <a href={% url 'eContainer:data_readings' %}?dev_group_id={{ dev_group.id }}>{{ dev_group.location__street }}</a>
+                                        <li><a tabindex="-1"
+                                               href={% url 'eContainer:data_readings' %}?dev_group_id={{ dev_group.id }}>{{ dev_group.location__street }}</a>
+                                        </li>
                                     {% endif %}
                                 {% endfor %}
-                            </div>
-                        </div>
+                            </ul>
+                        </li>
                     {% endfor %}
-                </div>
-
-                <div id="floating-panel">
-                    <b>Disposal routes: </b>
-                    <select id="route-selector"> </select>
-                </div>
-
-            </div>
-        </div>
-    </nav>
-</div>
+                </ul>
+            </li>
+            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown">Active Routes<span
+                    class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    {% for mun in municipalities %}
+                        <li class="dropdown-submenu">
+                            <a class="test" tabindex="-1">{{ mun.name }}<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                {% if mun.vehicle_indexes %}
+                                    {% for index in mun.vehicle_indexes %}
+                                        <li class="route" id="{{ mun.name }}-{{ index }}"
+                                            value="[{{ mun.name }},{{ index }}]"><a tabindex="-1">Route #{{ index }}</a>
+                                        </li>
+                                    {% endfor %}
+                                {% endif %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
 <div id="map"></div>
-<div id="floating-panel">
-    <b>Disposal routes: </b>
-    <select id="route-selector"> </select>
-</div>
+<meta id="mun_markers" data-mun_markers="{{ mun_markers }}">
+
 <script>
     initMap();
+</script>
+<script>
+    $(document).ready(function () {
+        $('.dropdown-submenu a.test').on("click", function (e) {
+            $(this).next('ul').toggle();
+            e.stopPropagation();
+            e.preventDefault();
+        });
+    });
 </script>

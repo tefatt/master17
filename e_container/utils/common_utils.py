@@ -6,7 +6,7 @@ import ast
 class CommonUtils:
     @staticmethod
     def decode_request(data):
-        body_unicode = data.decode('utf-8')
+        body_unicode = data.decode('utf-8').replace('\'', "\"")
         return json.loads(body_unicode)
 
     @staticmethod

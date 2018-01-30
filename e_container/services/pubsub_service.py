@@ -19,7 +19,7 @@ class PubSubService:
             pass
 
     def publish(self, data):
-        self.publisher.publish(settings.GOOGLE_API['DEVICE_DATA_TOPIC'], data=data)
+        self.publisher.publish(self.topic, data=data)
 
     def pull_from_subscription(self):
         pull = self.subscriber.api.pull(subscription=self.subscription, max_messages=1, return_immediately=True)

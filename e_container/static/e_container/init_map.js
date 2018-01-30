@@ -1,8 +1,8 @@
-function initMap(markers) {
+// dumps for last routes
+var last_markers = [];
+var last_directions_display;
 
-    if (markers === undefined) return;
-
-    var directionsService = new google.maps.DirectionsService;
+function initMap(mun_markers) {
     // Map options center on Sarajevo
     var options = {
         center: {lat: 43.8627, lng: 18.4001},
@@ -11,24 +11,51 @@ function initMap(markers) {
 
     // New map
     var map = new google.maps.Map(document.getElementById('map'), options);
+    var directionsService = new google.maps.DirectionsService;
 
-    if (markers.length===0){
+    if (mun_markers === undefined) {
+        var temp = $('#mun_markers').data("mun_markers");
+        temp = temp.replace(/'/g, '"');
+        mun_markers = JSON.parse(temp);
+
+    }
+
+    if (mun_markers.length === 0) {
         return;
     }
 
-    // Loop through markers
-    for (var x = 0; x < markers.length; x++) {
-        var node = document.createElement("option");
-        node.id = x;
-        node.value = x;
-        node.innerHTML = "Route " + (x + 1).toString();
-        document.getElementById("route-selector").appendChild(node);
+    console.log(mun_markers);
+
+    // Loop through markers and display only first by municipality
+    var first_by_mun = [];
+    for (var m in mun_markers) {
+        if (mun_markers.hasOwnProperty(m)) {
+            if (mun_markers[m].length != 0) first_by_mun.push(mun_markers[m][0]);
+        }
     }
-    document.getElementById('route-selector').value = "0";
+    municipality_init(first_by_mun, directionsService, map);
+}
 
+$(".route").click(function () {
+    var article = $(this).value();
+    var mun_markers = document.getElementById('mun_markers');
+    // municipality_init(mun_markers[]);
 
-    var onChangeHandler = function () {
-        x = document.getElementById("route-selector").selectedIndex;
+    // $.ajax({
+    //     type: "GET",
+    //     url: "http://fantasy.premierleague.com/web/api/elements/100/",
+    //     success: function (data) {
+    //         $("body").append(JSON.stringify(eval(data.markers)));
+    //     },
+    //     error: function (jqXHR, textStatus, errorThrown) {
+    //         alert(jqXHR.status);
+    //     }
+    // });​​​​​​​​
+});
+
+function municipality_init(markers, directionsService, map) {
+    for (var x = 0; x < markers.length; x++) {
+        // x = document.getElementById("route-selector-" + mun_id).selectedIndex;
         var route = markers[x];
         var waypoints = [];
         removeMarkers(last_markers);
@@ -41,12 +68,34 @@ function initMap(markers) {
             waypoints.push({stopover: false, location: new google.maps.LatLng(coords.lat, coords.lng)});
         }
         last_directions_display = calculateRoute(map, directionsService, route[0].coords, route[route.length - 1].coords, waypoints);
-    };
-    // initial route display
-    var last_markers = [];
-    var last_directions_display;
-    onChangeHandler();
-    document.getElementById('route-selector').addEventListener('change', onChangeHandler);
+
+        // var node = document.createElement("option");
+        // node.id = x;
+        // // node.value = x;
+        // // node.innerHTML = "Route " + (x + 1).toString();
+        // document.getElementById("route-selector-" + mun_id.toString()).appendChild(node);
+    }
+    // document.getElementById("route-selector-" + mun_id.toString()).value = "0";
+    // var onChangeHandler = function () {
+    //     x = document.getElementById("route-selector-" + mun_id.toString()).selectedIndex;
+    //     var route = markers[x];
+    //     var waypoints = [];
+    //     removeMarkers(last_markers);
+    //     removeDirectionsDisplay(last_directions_display);
+    //     for (var i = 0; i < route.length; i++) {
+    //         // Add marker
+    //         if (i == 0 || i == route.length - 1) continue;
+    //         last_markers.push(addMarker(map, route[i]));
+    //         var coords = route[i].coords;
+    //         waypoints.push({stopover: false, location: new google.maps.LatLng(coords.lat, coords.lng)});
+    //     }
+    //     last_directions_display = calculateRoute(map, directionsService, route[0].coords, route[route.length - 1].coords, waypoints);
+    // };
+    // // initial route display
+    // var last_markers = [];
+    // var last_directions_display;
+    // onChangeHandler();
+    // document.getElementById("route-selector-" + mun_id.toString()).addEventListener('change', onChangeHandler);
 }
 
 function addMarker(map, props) {
@@ -109,7 +158,7 @@ function calculateRoute(map, directionsService, start, end, waypoints) {
 }
 
 function removeDirectionsDisplay(directionsDisplay) {
-    if (directionsDisplay===undefined) return;
+    if (directionsDisplay === undefined) return;
     directionsDisplay.setMap(null);
 }
 
@@ -120,13 +169,15 @@ $(document).ready(
             type: "get",
             datatype: "json",
             success: function (data) {
-                initMap(eval(data.markers));
+                var mun_markers = document.getElementById('mun_markers');
+                mun_markers.value = data.mun_markers;
+                initMap(eval(data.mun_markers));
                 setTimeout(worker, 1200 * 1000);
             },
             complete: function () {
                 // Schedule the next request when the current one's complete
             }
         });
-    }())
-);
+    }));
+
 
