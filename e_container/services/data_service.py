@@ -2,6 +2,7 @@ from django.conf import settings
 import googlemaps
 import math
 from django.db.models import Case, When, Q
+from collections import defaultdict
 
 from e_container.services.rrdtool_service import RrdtoolService
 from e_container.utils.common_utils import CommonUtils
@@ -124,7 +125,7 @@ class DataService:
 
     @staticmethod
     def update_map():
-        mun_markers = dict()
+        mun_markers = defaultdict(list)
         for mun in MunicipalityModel.objects.all():
             group_locs = list()
             recent_data = RecentDataModel.objects.filter(Q(route__isnull=False), Q(vehicle__municipality=mun))
@@ -137,10 +138,9 @@ class DataService:
                     continue
                 group_locs.append(locs.values('id', 'latitude', 'longitude', 'device_group__last_demand'))
 
-            markers = list()
             for locs, vehicle in zip(group_locs, vehicles):
                 markers = DataService.helper_route_mapping(locs, vehicle)
-            mun_markers[mun.name] = markers
+                mun_markers[mun.name].append(markers)
         return mun_markers
 
     @staticmethod

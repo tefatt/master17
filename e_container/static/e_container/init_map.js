@@ -50,6 +50,7 @@ $(document).ready(function () {
 });
 
 function municipality_init(markers, directionsService, map) {
+    markers = markers[0];
     for (var x = 0; x < markers.length; x++) {
         var route = markers[x];
         var waypoints = [];
