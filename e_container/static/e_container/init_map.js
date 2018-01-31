@@ -2,7 +2,7 @@
 var last_markers = [];
 var last_directions_display;
 
-function initMap(mun_markers) {
+function initMap(mun_markers, mun_name, route_index) {
     // Map options center on Sarajevo
     var options = {
         center: {lat: 43.8627, lng: 18.4001},
@@ -26,36 +26,31 @@ function initMap(mun_markers) {
 
     console.log(mun_markers);
 
-    // Loop through markers and display only first by municipality
-    var first_by_mun = [];
+    // Loop through markers and display the selected ones
+    var route_to_display = [];
     for (var m in mun_markers) {
         if (mun_markers.hasOwnProperty(m)) {
-            if (mun_markers[m].length != 0) first_by_mun.push(mun_markers[m][0]);
+            if (mun_markers[m].length != 0) {
+                if (m === mun_name) route_to_display.push(mun_markers[m][route_index]);
+                else route_to_display.push(mun_markers[m][0]);
+            }
         }
     }
-    municipality_init(first_by_mun, directionsService, map);
+
+    municipality_init(route_to_display, directionsService, map);
 }
 
-$(".route").click(function () {
-    var article = $(this).value();
-    var mun_markers = document.getElementById('mun_markers');
-    // municipality_init(mun_markers[]);
-
-    // $.ajax({
-    //     type: "GET",
-    //     url: "http://fantasy.premierleague.com/web/api/elements/100/",
-    //     success: function (data) {
-    //         $("body").append(JSON.stringify(eval(data.markers)));
-    //     },
-    //     error: function (jqXHR, textStatus, errorThrown) {
-    //         alert(jqXHR.status);
-    //     }
-    // });​​​​​​​​
+$(document).ready(function () {
+    $(".route").click(function () {
+        var route_index = this['value'];
+        var mun_name = this['parentElement']['previousElementSibling']['id'];
+        var mun_markers = document.getElementById('mun_markers').value;
+        initMap(mun_markers, mun_name, route_index);
+    });
 });
 
 function municipality_init(markers, directionsService, map) {
     for (var x = 0; x < markers.length; x++) {
-        // x = document.getElementById("route-selector-" + mun_id).selectedIndex;
         var route = markers[x];
         var waypoints = [];
         removeMarkers(last_markers);
@@ -69,33 +64,7 @@ function municipality_init(markers, directionsService, map) {
         }
         last_directions_display = calculateRoute(map, directionsService, route[0].coords, route[route.length - 1].coords, waypoints);
 
-        // var node = document.createElement("option");
-        // node.id = x;
-        // // node.value = x;
-        // // node.innerHTML = "Route " + (x + 1).toString();
-        // document.getElementById("route-selector-" + mun_id.toString()).appendChild(node);
     }
-    // document.getElementById("route-selector-" + mun_id.toString()).value = "0";
-    // var onChangeHandler = function () {
-    //     x = document.getElementById("route-selector-" + mun_id.toString()).selectedIndex;
-    //     var route = markers[x];
-    //     var waypoints = [];
-    //     removeMarkers(last_markers);
-    //     removeDirectionsDisplay(last_directions_display);
-    //     for (var i = 0; i < route.length; i++) {
-    //         // Add marker
-    //         if (i == 0 || i == route.length - 1) continue;
-    //         last_markers.push(addMarker(map, route[i]));
-    //         var coords = route[i].coords;
-    //         waypoints.push({stopover: false, location: new google.maps.LatLng(coords.lat, coords.lng)});
-    //     }
-    //     last_directions_display = calculateRoute(map, directionsService, route[0].coords, route[route.length - 1].coords, waypoints);
-    // };
-    // // initial route display
-    // var last_markers = [];
-    // var last_directions_display;
-    // onChangeHandler();
-    // document.getElementById("route-selector-" + mun_id.toString()).addEventListener('change', onChangeHandler);
 }
 
 function addMarker(map, props) {

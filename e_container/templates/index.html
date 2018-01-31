@@ -38,12 +38,12 @@
                 <ul class="dropdown-menu">
                     {% for mun in municipalities %}
                         <li class="dropdown-submenu">
-                            <a class="test" tabindex="-1">{{ mun.name }}<span class="caret"></span></a>
+                            <a class="test" tabindex="-1" id="{{ mun.name }}">{{ mun.name }}<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 {% if mun.vehicle_indexes %}
                                     {% for index in mun.vehicle_indexes %}
-                                        <li class="route" id="{{ mun.name }}-{{ index }}"
-                                            value="[{{ mun.name }},{{ index }}]"><a tabindex="-1">Route #{{ index }}</a>
+                                        <li class="route" id="{{ mun.name }}-{{ index }}" value="{{ index }}"><a
+                                                tabindex="-1">Route #{{ index }}</a>
                                         </li>
                                     {% endfor %}
                                 {% endif %}
