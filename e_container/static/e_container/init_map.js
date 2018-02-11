@@ -24,8 +24,6 @@ function initMap(mun_markers, mun_name, route_index) {
         return;
     }
 
-    console.log(mun_markers);
-
     // Loop through markers and display the selected ones
     var route_to_display = [];
     for (var m in mun_markers) {
@@ -36,8 +34,9 @@ function initMap(mun_markers, mun_name, route_index) {
             }
         }
     }
-
-    municipality_init(route_to_display, directionsService, map);
+    for (var m in route_to_display) {
+        municipality_init(route_to_display[m], directionsService, map);
+    }
 }
 
 $(document).ready(function () {
@@ -50,12 +49,11 @@ $(document).ready(function () {
 });
 
 function municipality_init(markers, directionsService, map) {
-    markers = markers[0];
     for (var x = 0; x < markers.length; x++) {
         var route = markers[x];
         var waypoints = [];
-        removeMarkers(last_markers);
-        removeDirectionsDisplay(last_directions_display);
+        // removeMarkers(last_markers);
+        // removeDirectionsDisplay(last_directions_display);
         for (var i = 0; i < route.length; i++) {
             // Add marker
             if (i == 0 || i == route.length - 1) continue;

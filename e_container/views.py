@@ -14,11 +14,15 @@ from e_container.models.vehicle import VehicleModel
 
 
 def invocation(request):
-    data = json.load(open('/Users/teufiktutundzic/Desktop/master17/JSON measurement test/Novo Sarajevo.json'))
-    data = str(data).encode('utf-8')
+    prefixs = '/Users/teufiktutundzic/Desktop/master17/JSON measurement test/'
+    data_files = [prefixs + 'Novo Sarajevo.json', prefixs + 'Novi Grad.json']
+    municipalities_names = ['NOVO_SARAJEVO', 'NOVI_GRAD']
+    for data, mun_name in zip(data_files, municipalities_names):
+        data = json.load(open(data))
+        data = str(data).encode('utf-8')
 
-    pubsub = PubSubService('NOVO_SARAJEVO')
-    pubsub.publish(data)
+        pubsub = PubSubService(mun_name)
+        pubsub.publish(data)
     tasks.invocation()
 
 
