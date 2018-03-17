@@ -140,7 +140,7 @@ $(document).ready(
                 var mun_markers = document.getElementById('mun_markers');
                 mun_markers.value = data.mun_markers;
                 initMap(eval(data.mun_markers));
-                setTimeout(worker, 1200 * 1000);
+                setTimeout(worker, 300 * 1000);
             },
             complete: function () {
                 // Schedule the next request when the current one's complete
