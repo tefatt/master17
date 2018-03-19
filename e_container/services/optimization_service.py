@@ -23,7 +23,7 @@ class OptimizationService:
 
         # define search parameters
         search_parameters = pywrapcp.RoutingModel_DefaultSearchParameters()
-        search_parameters.first_solution_strategy = routing_enums_pb2.FirstSolutionStrategy.SAVINGS
+        search_parameters.first_solution_strategy = routing_enums_pb2.FirstSolutionStrategy.LOCAL_CHEAPEST_ARC
         search_parameters.time_limit_ms = 4 * 60 * 1000  # 4min
         search_parameters.local_search_metaheuristic = (
             routing_enums_pb2.LocalSearchMetaheuristic.TABU_SEARCH)
